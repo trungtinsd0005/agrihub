@@ -3,8 +3,8 @@ const ProductService = require('../services/ProductService')
 
 const createProduct = async(req, res) => {
     try {
-        const {name, image, type, price, countInStock, rating, description} = req.body
-        if(!name || !image || !type || !price || !countInStock || !rating || !description ) {
+        const {name, image, type, price, countInStock, rating, selled, discount, description} = req.body
+        if(!name || !image || !type || !price || !countInStock || !description ) {
             return res.status(200).json({
                 status: 'ERR',
                 message: 'All fields are required'

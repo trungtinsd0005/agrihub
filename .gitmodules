@@ -1,0 +1,3 @@
+[submodule "argiweb-frontend"]
+	path = argiweb-frontend
+	url = https://github.com/trungtinsd0005/agrihub.git
