@@ -16,7 +16,7 @@ const createProduct = (newProduct) => {
             const createdProduct = await Product.create({
                 name, 
                 image, 
-                type, 
+                type: type.toLowerCase(),
                 price, 
                 countInStock, 
                 rating: rating || 0.0,
@@ -153,6 +153,25 @@ const getAllProduct = (sort, filter) => {
     });
 }
 
+const getAllType = (sort, filter) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const allType = await Product.distinct('type')
+            resolve({
+                status: 'OK',
+                message: 'Get TYPE Product SUCCESS',
+                data: allType,
+            });
+        } catch (error) {
+            reject({
+                status: 'ERROR',
+                message: 'Get TYPE Products FAILED',
+                error: error.message
+            });
+        }
+    });
+}
+
 const getSearchProduct = (keyword, sort, filter) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -203,5 +222,6 @@ module.exports = {
     deleteProduct,
     getDetailsProduct,
     getAllProduct,
+    getAllType,
     getSearchProduct
 }

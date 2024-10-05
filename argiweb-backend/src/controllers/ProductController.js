@@ -86,6 +86,17 @@ const getAllProduct = async(req, res) => {
     }
 }
 
+const getAllType = async(req, res) => {
+    try {
+        const response = await ProductService.getAllType()
+        return res.status(200).json(response)
+    }catch(e) {
+        return res.status(404).json({
+            message: e
+        })
+    }
+}
+
 const getSearchProduct = async (req, res) => {
     try {
         const { keyword, sort, filter } = req.query;
@@ -104,5 +115,6 @@ module.exports = {
     deleteProduct,
     getDetailsProduct,
     getAllProduct,
+    getAllType,
     getSearchProduct
 }
