@@ -1,0 +1,48 @@
+.card-container {
+    width: 180px;
+}
+
+.ant-card-body {
+    padding: 10px 15px !important;
+}
+
+.rating {
+    display: flex;
+}
+
+.name-card {
+    font-size: 15px;
+    margin: 0 0 5px;
+    color: #373737;
+    font-weight: 700;
+    display: block;
+    height: 45px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.star-icon {
+    font-size: 14px;
+    color: #ffc107;
+}
+
+.number-rating {
+    margin-left: 5px;
+    font-size: 14px;
+    color: #10723A;
+}
+
+.sold-count {
+    font-size: 14px;
+    color: #10723A;
+}
+
+.price-product {
+    display: inline-block;
+    vertical-align: middle;
+    overflow: hidden;
+    font-size: 18px;
+    color: #10723A;
+    font-weight: bold;
+    line-height: 15px;
+}

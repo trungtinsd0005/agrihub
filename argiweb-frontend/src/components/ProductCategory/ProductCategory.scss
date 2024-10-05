@@ -1,0 +1,16 @@
+.menu-item {
+    font-weight: 500;
+    font-size: 15px;
+    color: #545454;
+    transition: background-color 0.3s, color 0.3s;
+
+    &.selected {
+        color: #fff;
+        background-color: #0A923C;
+    }
+
+    &:hover {
+        background-color: #0A923C !important;
+        color: white !important;
+    }
+}

@@ -1,0 +1,9 @@
+.wrapper {
+    background-color: #eee; // Màu nền cho component
+    padding: 20px; // Khoảng cách bên trong (tuỳ chỉnh nếu cần)
+}
+  
+.content {
+    max-width: 1250px; // Giới hạn chiều rộng tối đa
+    margin: 0 auto; // Căn giữa các thẻ con bên trong
+}

@@ -1,0 +1,78 @@
+.announcement-header {
+    padding: 4px 16px;
+    font-size: 15px;
+    color: #fff;
+    font-weight: bold;
+    width: 100vw;
+    background-color: #10723A;
+    text-align: center;
+}
+  
+.header {
+    padding: 10px 130px;
+    background-color: #0A923C;
+    display: flex;
+    align-items: center;
+}
+  
+.brand-name {
+    font-size: 18px;
+    color: #fff;
+    font-weight: bold;
+    margin-top: 20px;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+  
+.logo {
+    height: 30px;
+    margin-right: 5px;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.container-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+}
+
+.header-icon {
+    color: #fff;
+    font-size: 30px;
+}
+
+.search-input {
+    margin-right: 20px;
+    position: relative;
+}
+
+
+.name-icon {
+    margin-right: 10px;
+    margin-left: 0px;
+    color: #fff;
+    font-weight: bold;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.icon-section {
+    display: flex;
+    align-items: center;
+
+    .header-icon {
+        &:hover {
+            cursor: pointer;
+        }
+    }
+}
+
+
