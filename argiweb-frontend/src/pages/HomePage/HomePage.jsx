@@ -7,12 +7,19 @@ import WrapperBgColorComponent from "../../components/WrapperBgColorComponent/Wr
 import NavButtonComponent from "../../components/NavButtonComponent/NavButtonComponent";
 import * as ProductService from '../../services/ProductService'
 import { useQuery } from "@tanstack/react-query";
+import { useDispatch } from 'react-redux';
+import { addToCart } from "../../redux/slides/cartSlide";
 import dayjs from 'dayjs';
 
 const HomePage = () => {
     const [filterType, setFilterType] = useState('new');
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
+    const dispatch = useDispatch();
+
+    const handleAddToCart = (product) => {
+        dispatch(addToCart(product));
+    };
 
     const fetchProductAll = async() => {
         const res = await ProductService.getAllProduct()
@@ -112,6 +119,7 @@ const HomePage = () => {
                                         selled={product.selled}
                                         discount={product.discount}
                                         id={product._id}
+                                        onAddToCart={() => handleAddToCart(product)}
                                     />
                                 </div>
                             ))

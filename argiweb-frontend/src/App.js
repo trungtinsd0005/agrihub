@@ -4,6 +4,7 @@ import {routes} from './routes'
 import DefaultComponent from "./components/DefaultComponent/DefaultComponent";
 import { ConfigProvider } from 'antd';
 import PrivateRoute from "./routes/PrivateRoute";
+import { Protector } from "./helpers";
 
 
  
@@ -18,9 +19,11 @@ function App() {
             return (
               <Route key={route.path} path={route.path} element={
                 <ConfigProvider theme={{ token: { colorPrimary: '#0A923C' } }}>
-                  <Layout>   
-                    {route.isPrivate ? (
-                        <PrivateRoute element={<Page />} isAdminRequired={route.isAdmin} />
+                  <Layout>
+                    {route.isProtected ? (
+                      <Protector Component={<Page />} />
+                    ) : route.isPrivate ? (
+                      <PrivateRoute element={<Page />} isAdminRequired={route.isAdmin} />
                     ) : (
                         <Page />
                     )}

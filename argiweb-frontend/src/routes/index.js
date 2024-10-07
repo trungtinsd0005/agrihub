@@ -7,9 +7,9 @@ import AdminPage from "../pages/AdminPage/AdminPage";
 import AdminDashBoardPage from "../pages/AdminDashBoardPage/AdminDashBoardPage";
 import AdminUserPage from "../pages/AdminUserPage/AdminUserPage"; 
 import AdminProductPage from "../pages/AdminProductPage/AdminProductPage";
-import SignUpPage from "../pages/SignUpPage/SignUpPage";
 import SearchPage from "../pages/SearchPage/SearchPage";
 import TypePage from "../pages/TypePage/TypePage";
+import CartPage from "../pages/CartPage/CartPage";
 
 export const routes = [
     {
@@ -20,7 +20,8 @@ export const routes = [
     {
         path: '/order',
         page: OrderPage,
-        isShowHeader: true
+        isShowHeader: true,
+        isProtected: true
     },
     {
         path: '/product/:id',
@@ -32,10 +33,6 @@ export const routes = [
         page: AdminPage,
         isPrivate: true,
         isAdmin: true
-    },
-    {
-        path: '/sign-up',
-        page: SignUpPage,
     },
     {
         path: '/profile-user',
@@ -62,6 +59,11 @@ export const routes = [
     {
         path: '/type/:type',
         page: TypePage,
+        isShowHeader: true
+    },
+    {
+        path: '/cart',
+        page: CartPage,
         isShowHeader: true
     },
     {

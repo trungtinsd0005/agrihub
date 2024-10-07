@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Badge, Col, Dropdown, Input, Menu } from 'antd';
 import { UserOutlined, ShoppingCartOutlined, BellOutlined} from '@ant-design/icons';
 import './HeaderComponent.scss';
+import { useSelector } from 'react-redux';
 import logo from '../../assets/images/logobrand.png';
 import AuthModalComponent from '../AuthModalComponent/AuthModalComponent';
 import { logoutUser } from '../../services/UserService';
@@ -15,8 +16,8 @@ const HeaderComponent = () => {
   const [suggestions, setSuggestions] = useState([]);
   const [searchValue, setSearchValue] = useState('');
   const navigate = useNavigate();
-
   const [username, setUsername] = useState(null);
+
   const token = localStorage.getItem('access_token');
   let decodedToken = null;
   if(token) {
@@ -24,6 +25,9 @@ const HeaderComponent = () => {
   }
   const isAdmin = decodedToken ? decodedToken.payload.isAdmin : false;
   const label = isAdmin ? 'Trang Quản lý' : 'Tài khoản người dùng';
+
+  const cartItems = useSelector((state) => state.cart.items);
+  const cartCount = cartItems.length;
 
   const menu = (
     <Menu>
@@ -56,7 +60,10 @@ const HeaderComponent = () => {
     if (value) {
       try {
         const response = await getSearchProduct(value);
-        setSuggestions(response.data);
+        const filteredSuggestions = response.data.filter(item =>
+          item.name.toLowerCase().includes(value.toLowerCase())
+        );
+        setSuggestions(filteredSuggestions);
       } catch (error) {
         console.error('Lỗi khi tìm kiếm sản phẩm:', error);
       }
@@ -72,6 +79,11 @@ const HeaderComponent = () => {
       navigate(`/search?keyword_search=${value}`);
     }
   };
+
+  const handleNavigateCartPage = () => {
+    navigate('/cart')
+  }
+
 
   return (
     <>
@@ -119,9 +131,9 @@ const HeaderComponent = () => {
               <UserOutlined className="header-icon" onClick={showModal} />
             )}
             
-            <Badge count={4} size="small">
-              <ShoppingCartOutlined className="header-icon" />
-            </Badge>
+              <Badge count={cartCount} size="small" onClick={handleNavigateCartPage}>
+                <ShoppingCartOutlined className="header-icon" />
+              </Badge>
           </div>
         </Col>
       </div>

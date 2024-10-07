@@ -1,19 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { InputNumber, Button } from 'antd';
+import { useDispatch } from 'react-redux';
+import { updateQuantity } from '../../redux/slides/cartSlide';
 
-const QuantityInput = ({ countInStock }) => {
-  const [quantity, setQuantity] = useState(1);
+const QuantityInput = ({ countInStock, initialQuantity, itemId }) => {
+  const dispatch = useDispatch();
+  const [quantity, setQuantity] = useState(initialQuantity || 1);
+
+  useEffect(() => {
+    setQuantity(initialQuantity);
+  }, [initialQuantity]);
 
   const increment = () => {
-    if(quantity < countInStock){
-      setQuantity(prevQuantity => prevQuantity + 1);
+    if (quantity < countInStock) {
+      const newQuantity = quantity + 1;
+      setQuantity(newQuantity);
+      dispatch(updateQuantity({ id: itemId, quantity: newQuantity }));
     }
   };
 
   const decrement = () => {
     if (quantity > 1) {
-      setQuantity(prevQuantity => prevQuantity - 1);
+      const newQuantity = quantity - 1;
+      setQuantity(newQuantity);
+      dispatch(updateQuantity({ id: itemId, quantity: newQuantity }));
     }
+  };
+
+  const handleChange = (value) => {
+    setQuantity(value);
+    dispatch(updateQuantity({ id: itemId, quantity: value }));
   };
 
   return (
@@ -33,7 +49,7 @@ const QuantityInput = ({ countInStock }) => {
         min={1}
         value={quantity}
         controls={false}
-        onChange={setQuantity}
+        onChange={handleChange}
         style={{ width: '100px', textAlign: 'center', height: '45px', paddingLeft: '30px', lineHeight: '40px', fontSize: '16px' }}
       />
       <Button 

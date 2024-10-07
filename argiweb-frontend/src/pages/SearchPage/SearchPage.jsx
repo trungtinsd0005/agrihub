@@ -38,13 +38,18 @@ const SearchPage = () => {
         setIsLoading(true);
         try {
           const response = await getSearchProduct(keyword);
-          setProducts(response.data);
+          const filteredProducts = response.data.filter(item =>
+            item.name.toLowerCase().includes(keyword.toLowerCase())
+          );
+          setProducts(filteredProducts);
         } catch (error) {
           console.error('Lỗi khi tìm kiếm sản phẩm:', error);
         } finally {
           setIsLoading(false);
         }
-      } 
+      } else {
+        setProducts([]);
+      }
     };
 
     fetchSearchResults();
