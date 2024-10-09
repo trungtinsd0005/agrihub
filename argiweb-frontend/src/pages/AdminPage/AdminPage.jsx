@@ -8,7 +8,8 @@ import AdminUserPage from '../AdminUserPage/AdminUserPage';
 import AdminProductPage from '../AdminProductPage/AdminProductPage';
 import './AdminPage.scss'
 import { useNavigate } from 'react-router-dom';
-import { logoutUser } from '../../services/UserService';
+import { clearCart } from '../../redux/slides/cartSlide';
+import { useDispatch } from 'react-redux';
 
 const { Header, Content, Sider } = Layout;
 
@@ -16,6 +17,8 @@ const AdminPage = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [selectedKey, setSelectedKey] = useState('1');
   const [breadcrumbs, setBreadcrumbs] = useState([{ label: 'Home', path: '/' }, { label: 'Dashboard'}]);
+  const dispatch = useDispatch();
+
 
   const onCollapse = () => {
     setCollapsed(!collapsed);
@@ -43,11 +46,15 @@ const AdminPage = () => {
 
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    logoutUser();
-    message.success('Đăng xuất thành công!');
+  const handleLogoutUser = () => {
+    dispatch(clearCart());
+    localStorage.removeItem('userId');
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('username');
+    localStorage.removeItem('refresh_token');
     navigate('/');
-  };
+    window.location.reload();
+  }
 
   const renderPage = (key) => {
     switch(key) {
@@ -97,7 +104,7 @@ const AdminPage = () => {
           <Menu.Item key="5" icon={<LogoutOutlined />}>
             <Popconfirm
               title="Bạn có chắc chắn muốn đăng xuất?"
-              onConfirm={handleLogout}
+              onConfirm={handleLogoutUser}
               okText="Có"
               cancelText="Không"
             >

@@ -14,7 +14,7 @@
 
 .suggestion-list {
     overflow: hidden;
-    max-height: 375px;
+    max-height: 400px;
 }
 
 .suggestion-item {
@@ -46,10 +46,11 @@
 }
 
 .container-result-search {
-    justify-content: space-between;
+    display: flex;
     padding: 5px 10px;
-    
 }
+
+
 
 .container-product-search {
     cursor: pointer;
@@ -60,9 +61,26 @@
     width: 80px;
 }
 
+.product-info-container {
+    width: 100%;
+    height: 100%;
+    margin-left: 10px;
+    position: relative;
+}
+
+.name-div {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    width: 100%;
+    overflow: hidden;
+    height: 6.5vh;
+
+}
+
 .product-infor-search {
     display: flex;
-    flex-direction: column;
+    flex-direction:column;
     margin-top: 10px;
     margin-left: 10px;
     max-height: 80px;
@@ -75,15 +93,45 @@
     }
 }
 
+.price-cart-div {
+    display: flex;
+    justify-content: space-between;
+    // align-items: flex-end;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.price-span {
+    color:#10723A;
+    display: block;
+}
+
 .container-cart-icon {
-    height: 80px;
-    line-height: 80px;
+    position: relative;
+    cursor: pointer;
+    border: 1px solid #10723A;
+    border-radius: 5px;
+    transform: translateY(-25%);
+    height: fit-content;
+
+    &:hover {
+        background-color: #10723A;
+        .cart-icon-search, .plus-icon-search {  
+            color: #FFBE00;
+        }
+    }
 }
 
 .cart-icon-search {
     font-size: 30px;
-    color: #0A923C;
-    border: 1px solid #0A923C;
-    border-radius: 5px;
+    color: #10723A;
 
+}
+
+.plus-icon-search {
+    position: absolute;
+    font-size: 8px;
+    color: #10723A;
+    top: 35%;
+    right: 28%;
 }

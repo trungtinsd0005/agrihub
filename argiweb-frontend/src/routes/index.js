@@ -10,6 +10,7 @@ import AdminProductPage from "../pages/AdminProductPage/AdminProductPage";
 import SearchPage from "../pages/SearchPage/SearchPage";
 import TypePage from "../pages/TypePage/TypePage";
 import CartPage from "../pages/CartPage/CartPage";
+import CheckoutPage from "../pages/CheckoutPage/CheckoutPage";
 
 export const routes = [
     {
@@ -22,6 +23,11 @@ export const routes = [
         page: OrderPage,
         isShowHeader: true,
         isProtected: true
+    },
+    {
+        path: '/checkout',
+        page: CheckoutPage,
+        isShowHeader: true,
     },
     {
         path: '/product/:id',

@@ -107,6 +107,7 @@ const loginUser = (userCredentials) => {
                 message: 'SUCCESS',
                 _id: checkUser._id,
                 name: checkUser.name,
+                address: checkUser.address,
                 access_token,
                 refresh_token
             })

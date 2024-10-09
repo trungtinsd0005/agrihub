@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Badge, Col, Dropdown, Input, Menu } from 'antd';
+import { Badge, Col, Dropdown, Input, Menu, message } from 'antd';
 import { UserOutlined, ShoppingCartOutlined, BellOutlined} from '@ant-design/icons';
 import './HeaderComponent.scss';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import logo from '../../assets/images/logobrand.png';
 import AuthModalComponent from '../AuthModalComponent/AuthModalComponent';
-import { logoutUser } from '../../services/UserService';
 import { useNavigate } from 'react-router-dom';
 import { getSearchProduct } from '../../services/ProductService';
 import Suggestion from '../SuggestionComponent/Suggestion';
+import { clearCart } from '../../redux/slides/cartSlide';
+import store from '../../redux/store';
 const { Search } = Input;
 
 const HeaderComponent = () => {
@@ -28,6 +29,19 @@ const HeaderComponent = () => {
 
   const cartItems = useSelector((state) => state.cart.items);
   const cartCount = cartItems.length;
+  const dispatch = useDispatch();
+
+
+  const handleLogoutUser = () => {
+    dispatch(clearCart());
+    localStorage.removeItem('userId');
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('username');
+    localStorage.removeItem('address');
+    localStorage.removeItem('refresh_token');
+    navigate('/');
+    window.location.reload();
+  }
 
   const menu = (
     <Menu>
@@ -35,7 +49,7 @@ const HeaderComponent = () => {
         <span onClick={() => navigate(isAdmin ? '/system' : '/profile-user')}>{label}</span>
       </Menu.Item>
       <Menu.Item key="2">
-        <span onClick={logoutUser}>Đăng xuất</span>
+        <span onClick={handleLogoutUser}>Đăng xuất</span>
       </Menu.Item>
     </Menu>
   );

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { InputNumber, Button } from 'antd';
+import { InputNumber, Button, message } from 'antd';
 import { useDispatch } from 'react-redux';
 import { updateQuantity } from '../../redux/slides/cartSlide';
 
-const QuantityInput = ({ countInStock, initialQuantity, itemId }) => {
+const QuantityInput = ({ countInStock, initialQuantity, itemId, onQuantityChange }) => {
   const dispatch = useDispatch();
   const [quantity, setQuantity] = useState(initialQuantity || 1);
 
@@ -16,6 +16,7 @@ const QuantityInput = ({ countInStock, initialQuantity, itemId }) => {
       const newQuantity = quantity + 1;
       setQuantity(newQuantity);
       dispatch(updateQuantity({ id: itemId, quantity: newQuantity }));
+      onQuantityChange(newQuantity);
     }
   };
 
@@ -24,12 +25,18 @@ const QuantityInput = ({ countInStock, initialQuantity, itemId }) => {
       const newQuantity = quantity - 1;
       setQuantity(newQuantity);
       dispatch(updateQuantity({ id: itemId, quantity: newQuantity }));
+      onQuantityChange(newQuantity);
     }
   };
 
   const handleChange = (value) => {
+    if (value > countInStock) {
+      message.error("Số lượng vượt quá số lượng có sẵn!");
+      return;
+    }
     setQuantity(value);
     dispatch(updateQuantity({ id: itemId, quantity: value }));
+    onQuantityChange(value);
   };
 
   return (

@@ -45,6 +45,10 @@
 .header-icon {
     color: #fff;
     font-size: 30px;
+
+    &:hover {
+        cursor: pointer;
+    }
 }
 
 .search-input {

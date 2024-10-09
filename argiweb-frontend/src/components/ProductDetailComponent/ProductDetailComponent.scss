@@ -25,7 +25,9 @@
 
 
 .titleProduct {
-    font-weight: 700;
+    font-weight: 600;
+    font-size: 24px;
+    margin-bottom: 10px;
 }
 
 .divInline {
@@ -35,27 +37,27 @@
 .ratingReview {
     color: #10723A;
     text-decoration: underline;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 500;
 
     &::before {
         content: "|";
         margin: 0 8px;
         color: #ccc;
-        font-size: 15px;
+        font-size: 14px;
     }
 
     &::after {
         content: "|";
         margin: 0 8px;
         color: #ccc;
-        font-size: 15px;
+        font-size: 14px;
     }
 }
 
 .countSold {
     color: #b2b2b2;
-    font-size: 15px;
+    font-size: 14px;
 }
 
 // Price Products
@@ -69,7 +71,7 @@
 
 .priceProducts span {
     color: #333;
-    font-size: 15px;
+    font-size: 14px;
     text-decoration: line-through;
     vertical-align: middle;
     padding-left: 8px;
@@ -83,15 +85,14 @@
 
 // Item
 .item {
-    font-size: 15px;
+    font-size: 14px;
     margin-bottom: 20px;
-    padding-left: 25px;
 }
 
 .title {
     color: #858383;
     display: block;
-    font-size: 15px;
+    font-size: 14px;
     margin-bottom: 20px;
 }
 
@@ -100,7 +101,7 @@
 .deliverySelect, .deliveryPrice span {
     color:#10723A;
     text-decoration: underline;
-    font-weight: 500;
+    font-weight: 400;
 
     &:hover {
         text-decoration: none;
@@ -123,7 +124,7 @@
     border: #10723A solid 1px;
     width: auto;
     padding: 3px 20px;
-    margin-right: 15px;
+    margin-right: 14px;
     margin-bottom: 20px;
 
     &:hover {
@@ -193,7 +194,7 @@
 
 .contactUsTitle {
     color: #858383;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 500;
 }
 
@@ -207,7 +208,7 @@
     display: block;
     background-color: #10723A;
     color: #fff;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 500;
     text-align: center;
     padding: 8px;
@@ -216,7 +217,7 @@
 .contactByMess {
     background-color: #3578e5;
     color: #fff;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 500;
     display: block;
     width: 48%;
@@ -227,3 +228,43 @@
 a:hover {
     color: #fff;
 }
+
+.customSelect {
+    cursor: pointer;
+    border: none;
+    width: 100%;
+    background: none;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+}
+
+
+.customDiv {
+    padding: 8px;
+    background-color: #f5f5f5;
+}
+
+.dropdownList {
+    position: absolute;
+    z-index: 1;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background-color: white;
+    border: 1px solid #ccc;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+
+.dropdownList li {
+    padding: 8px;
+    cursor: pointer;
+    color: #373737;
+}
+
+.dropdownList li:hover {
+    background-color: #f0f0f0;
+}
+

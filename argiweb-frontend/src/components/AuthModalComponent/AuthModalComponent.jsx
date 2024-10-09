@@ -4,6 +4,8 @@ import { Modal, Tabs, Form, Input, Button, message } from 'antd';
 import sideImage from '../../assets/images/imageLogin.png';
 import './AuthModalComponent.scss';
 import { loginUser, signupUser} from '../../services/UserService';
+import { initializeCart } from '../../redux/slides/cartSlide';
+import { useDispatch } from 'react-redux';
 
 const { TabPane } = Tabs;
 
@@ -18,9 +20,12 @@ const AuthModalComponent = ({ visible, onCancel }) => {
         mutationFn: signupUser
     });
 
+    const dispatch = useDispatch();
+
     const onLoginFinish = (values) => {
         mutateLogin(values, {
             onSuccess: (data) => {
+                console.log('Dữ liệu nhận được từ API:', data);
                 if (data.status === 'OK') {
                     console.log('Đăng nhập thành công:', data);
 
@@ -28,10 +33,20 @@ const AuthModalComponent = ({ visible, onCancel }) => {
                     localStorage.setItem('access_token', data.access_token);
                     localStorage.setItem('refresh_token', data.refresh_token);
                     localStorage.setItem('userId', data._id);
-                    
+                    localStorage.setItem('address', data.address);
+
+                    const userId = data._id;
+                    const savedCart = JSON.parse(localStorage.getItem(`cart_${userId}`)) || [];
+                    console.log('Saved Cart:', savedCart);
+                    if (Array.isArray(savedCart)) {
+                        dispatch(initializeCart(savedCart));
+                    } else {
+                        console.log("Init không thành công");
+                        dispatch(initializeCart([]));
+                    }
+
                     window.location.reload();
                     onCancel();
-
                     message.success('Đăng nhập thành công');
                 }else {
                     console.error('Lỗi đăng nhập:', data.message);

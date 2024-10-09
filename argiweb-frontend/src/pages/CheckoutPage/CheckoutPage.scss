@@ -1,0 +1,25 @@
+.back-button {
+    color: #0a923c;
+    background-color: white;
+    border: 1px solid #0a923c;
+    padding: 0 20px;
+    position: relative;
+    font-size: 16px;
+    height: 40px;
+    font-weight: 600;
+    border-radius: 6px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+
+    .left-icon {
+        margin-right: 5px;
+    }
+
+
+    &:hover {
+        background-color: #10723A;
+        border: 1px solid #10723A;
+        color: #fff;
+        cursor: pointer;
+    }
+}

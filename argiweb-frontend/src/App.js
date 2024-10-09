@@ -7,8 +7,10 @@ import PrivateRoute from "./routes/PrivateRoute";
 import { Protector } from "./helpers";
 
 
+
  
 function App() {
+
   return (
     <div>
       <Router>
@@ -18,7 +20,7 @@ function App() {
             const Layout = route.isShowHeader ? DefaultComponent : Fragment
             return (
               <Route key={route.path} path={route.path} element={
-                <ConfigProvider theme={{ token: { colorPrimary: '#0A923C' } }}>
+                <ConfigProvider theme={{ token: { colorPrimary: '#0A923C', fontFamily: 'Be Vietnam Pro, sans-serif' } }}>
                   <Layout>
                     {route.isProtected ? (
                       <Protector Component={<Page />} />

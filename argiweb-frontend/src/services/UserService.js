@@ -7,6 +7,8 @@ const apiClient = axios.create({
   }
 });
 
+
+
 export const loginUser = async (data) => {
   try {
     const res = await apiClient.post('/user/sign-in', data);
@@ -27,12 +29,6 @@ export const signupUser = async (data) => {
   }
 };
 
-export const logoutUser = () => {
-  localStorage.removeItem('access_token');
-  localStorage.removeItem('username');
-  localStorage.removeItem('refresh_token');
-  window.location.reload();
-};
 
 export const updateUser = async(id, data) => {
   try {

@@ -1,7 +1,13 @@
-.container-left {
+.container-left, .container-right {
     background-color: #fff;
     padding: 0 20px;
+    border-radius: 5px;
 }
+
+.container-left {
+    margin-right: 20px;
+}
+
 .back-button {
     color: #0a923c;
     background-color: white;
@@ -14,6 +20,12 @@
     border-radius: 6px;
     margin-top: 30px;
     margin-bottom: 20px;
+
+    .left-icon {
+        margin-right: 5px;
+    }
+
+
     &:hover {
         background-color: #10723A;
         border: 1px solid #10723A;
@@ -21,6 +33,31 @@
         cursor: pointer;
     }
 }
+
+.next-button {
+    color: #0a923c;
+    background-color: white;
+    width: 100%;
+    border: 1px solid #0a923c;
+    margin: 20px 0;
+    font-size: 16px;
+    height: 40px;
+    font-weight: 600;
+    border-radius: 6px;
+
+    .right-icon {
+        margin-left: 5px;
+    }
+
+    &:hover {
+        background-color: #10723A;
+        border: 1px solid #10723A;
+        color: #fff;
+        cursor: pointer;
+    }
+
+}
+
 
 .container-handle-many {
     display: flex;
@@ -73,6 +110,9 @@
 
 .name-item {
     width: 40%;
+    font-size: 15px;
+    font-weight: 500;
+    color: #373737;
 }
 
 .price-delete-div {
@@ -89,3 +129,43 @@
         font-size: 22px;
     }
 }
+
+.span-address {
+    color: #373737;
+    font-size: 15px;
+    font-weight: 400;
+    padding-top: 20px;
+    display: block;
+}
+
+.span-title {
+    color: #373737;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.container-price-right {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0;
+}
+
+.provisional-price {
+    font-size: 15px;
+    color: #373737;
+    font-weight: 400;
+}
+
+.total-price {
+    font-size: 16px;
+    color: #373737;
+    font-weight: 500;
+}
+
+.span-note {
+    color: #FF0000;
+    font-size: 15px;
+    font-weight: 400;
+    font-style: italic;
+}
+

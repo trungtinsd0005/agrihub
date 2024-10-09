@@ -1,11 +1,11 @@
 import React from 'react'
 import WrapperBgColorComponent from '../../components/WrapperBgColorComponent/WrapperBgColorComponent'
 import { Row, Col, List, Image } from 'antd'
-import {LeftOutlined, CheckSquareOutlined, DeleteOutlined} from '@ant-design/icons'
+import {LeftOutlined, EnvironmentFilled, DeleteOutlined, RightOutlined} from '@ant-design/icons'
 import './CartPage.scss'
 import { useSelector, useDispatch } from 'react-redux';
 import QuantityInput from '../../components/QuantityInput/QuantityInput'
-import { removeFromCart } from '../../redux/slides/cartSlide'
+import { removeFromCart, updateQuantity } from '../../redux/slides/cartSlide'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
@@ -15,6 +15,10 @@ const CartPage = () => {
     const navigate = useNavigate();
     const cartItems = useSelector((state) => state.cart.items);
     const [selectedItems, setSelectedItems] = useState(new Set());
+
+    const totalSelectedPrice = Array.from(selectedItems)
+        .map(id => cartItems.find(item => item.id === id))
+        .reduce((total, item) => item ? total + item.price * item.quantity : total, 0);
 
     const handleToggleSelect = (id) => {
         const newSelectedItems = new Set(selectedItems);
@@ -37,6 +41,10 @@ const CartPage = () => {
         }
     };
 
+    const handleRemoveItem = (id) => {
+        dispatch(removeFromCart({ id }));
+    };
+
     const handleRemoveSelected = () => {
         const idsToRemove = Array.from(selectedItems);
 
@@ -53,13 +61,20 @@ const CartPage = () => {
         }
     };
 
+    const handleQuantityChange = (id, newQuantity) => {
+        dispatch(updateQuantity({ id, quantity: newQuantity }));
+    };
+
+    const address = localStorage.getItem('address');
+    const displayAddress = address === 'undefined' || address === null || address === '' ?   'Chưa có địa chỉ giao hàng' : address;
+
     return (
         <WrapperBgColorComponent>
             <Row>
                 <Col span={18}>
                     <div className='container-left'>
                         <button className='back-button' onClick={() => navigate(-1)}>
-                            <LeftOutlined />
+                            <LeftOutlined className='left-icon' />
                             TIẾP TỤC MUA SẮM
                         </button>
                         <div className='container-handle-many'>
@@ -89,12 +104,13 @@ const CartPage = () => {
                                             <span className='name-item'>{item.name}</span>
                                             <div className='price-delete-div'>
                                                 <span className='price-item'>{item.price.toLocaleString('vi-VN')} ₫</span>
-                                                <DeleteOutlined className='delete-item' />
+                                                <DeleteOutlined className='delete-item' onClick={() => handleRemoveItem(item.id)} />
                                             </div>
                                             <QuantityInput 
                                                 countInStock={item.countInStock} 
-                                                initialQuantity={item.quantity} 
+                                                initialQuantity={item.quantity > item.countInStock ? item.countInStock : item.quantity} 
                                                 itemId={item.id}
+                                                onQuantityChange={(newQuantity) => handleQuantityChange(item.id, newQuantity)}
                                             />
                                         </List.Item>
                                     ))
@@ -106,7 +122,22 @@ const CartPage = () => {
                     </div>
                 </Col>
                 <Col span={6}>
-                    <h1>Hi</h1>
+                    <div className='container-right'>
+                        <span className='span-address'>
+                            Địa điểm: <EnvironmentFilled/> {displayAddress}
+                        </span>
+                        <div className='tier-line'></div>
+                        <span className='span-title'>Thông tin đơn hàng</span>
+                        <div className='container-price-right'>
+                            <span className='provisional-price'>Tạm tính:</span>
+                            <span className='total-price'>{totalSelectedPrice.toLocaleString('vi-VN')} ₫</span>
+                        </div>
+                        <span className='span-note'>Quý khách vui lòng kiểm tra lại Giỏ hàng và sản phẩm tặng kèm (nếu có) trước khi tiến hành thanh toán</span>
+                        <button className='next-button' onClick={() => navigate('/checkout')}>
+                            <span>TIẾN HÀNH THANH TOÁN</span> 
+                            <RightOutlined className='right-icon' />
+                        </button>
+                    </div>
                 </Col>
             </Row>
         </WrapperBgColorComponent>

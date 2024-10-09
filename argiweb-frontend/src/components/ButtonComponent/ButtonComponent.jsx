@@ -1,9 +1,9 @@
 import React from 'react'
 import { Button } from 'antd';
 
-const ButtonComponent = ({ label, className }) => {
+const ButtonComponent = ({ label, className, onClick }) => {
   return (
-    <Button className={className}>
+    <Button className={className} onClick={onClick}>
       {label}
     </Button>
   );
