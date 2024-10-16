@@ -1,0 +1,119 @@
+footer {
+    color: #858383;
+    font-size: 14px;
+}
+
+.cs-footer {
+    background-color: #0A923C;
+    height: 45px;
+    line-height: 45px;
+    margin-bottom: 20px;
+}
+
+.main-container {
+    background-color: #fff;
+    max-width: 1250px;
+    margin: 0 auto;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+
+    img {
+        filter: sepia(100%) saturate(1000%) hue-rotate(90deg) brightness(60%);
+        height: auto;
+        width: 40px;
+    }
+    span {
+        font-size: 20px;
+        font-weight: bold;
+        color: #0A923C;
+        transform: translateY(10%);
+
+    }
+}
+
+.footer-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    gap: 10px;
+}
+.custom-icon {
+    font-size: 20px;
+    color: #0A923C;
+    height: auto;
+    max-width: 100%;
+}
+
+.info {
+    color: #858383;
+    font-size: 14px;
+}
+
+.tier-line {
+    line-height: 24px;
+    padding: 8px 0;
+    font-size: 13px;
+    border-top: 1px solid #E6E6E6;
+    margin-top: 30px;
+    color: #858383;
+}
+
+.contact-icon {
+    display: flex;
+    gap: 20px;
+    font-size: 30px;
+    &:hover {
+        cursor: pointer;
+    }
+    .twitter-icon {
+        background: linear-gradient(45deg, #1DA1F2, #1A91DA, #1C85D6);
+        border-radius: 5px;
+        color: #fff;
+    }
+
+    .insta-icon {
+        background: linear-gradient(45deg, #833AB4, #C13584, #F77737, #FCAF45);
+        border-radius: 5px;
+        color: #fff;
+    }
+
+    .facebook-icon {
+        background: linear-gradient(45deg, #1877F2, #165DC6, #154FA5);
+        color: #fff;
+    }
+
+    .youtube-icon {
+        background: linear-gradient(45deg, #FF0000, #D90000, #C00000);
+        color: #fff;
+        padding: 0 2px;
+        border-radius: 5px;
+    }
+
+
+}
+
+// Col-2,3
+.col-center__container {
+    margin-bottom: 20px;
+}
+
+.title-center {
+    font-size: 15px;
+    color: #373737;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+a {
+    color: #858383;
+    &:hover {
+        color: #0A923C;
+    }
+    display: block;
+    margin-bottom: 15px;
+}

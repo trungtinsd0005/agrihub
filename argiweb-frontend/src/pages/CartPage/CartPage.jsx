@@ -1,7 +1,7 @@
 import React from 'react'
 import WrapperBgColorComponent from '../../components/WrapperBgColorComponent/WrapperBgColorComponent'
-import { Row, Col, List, Image } from 'antd'
-import {LeftOutlined, EnvironmentFilled, DeleteOutlined, RightOutlined} from '@ant-design/icons'
+import { Row, Col, List, Image, message } from 'antd'
+import {LeftOutlined, DeleteOutlined, RightOutlined} from '@ant-design/icons'
 import './CartPage.scss'
 import { useSelector, useDispatch } from 'react-redux';
 import QuantityInput from '../../components/QuantityInput/QuantityInput'
@@ -65,9 +65,15 @@ const CartPage = () => {
         dispatch(updateQuantity({ id, quantity: newQuantity }));
     };
 
-    const address = localStorage.getItem('address');
-    const displayAddress = address === 'undefined' || address === null || address === '' ?   'Chưa có địa chỉ giao hàng' : address;
-
+    const handleCheckout = () => {
+        const selectedProducts = cartItems.filter(item => selectedItems.has(item.id));
+        localStorage.setItem('selectedProducts', JSON.stringify(selectedProducts));
+        if(selectedProducts.length > 0) {
+            navigate('/checkout');
+        } else {
+            alert("Vui lòng chọn sản phẩm trước khi tiến hành thanh toán");
+        }
+    };
     return (
         <WrapperBgColorComponent>
             <Row>
@@ -123,17 +129,13 @@ const CartPage = () => {
                 </Col>
                 <Col span={6}>
                     <div className='container-right'>
-                        <span className='span-address'>
-                            Địa điểm: <EnvironmentFilled/> {displayAddress}
-                        </span>
-                        <div className='tier-line'></div>
                         <span className='span-title'>Thông tin đơn hàng</span>
                         <div className='container-price-right'>
                             <span className='provisional-price'>Tạm tính:</span>
                             <span className='total-price'>{totalSelectedPrice.toLocaleString('vi-VN')} ₫</span>
                         </div>
                         <span className='span-note'>Quý khách vui lòng kiểm tra lại Giỏ hàng và sản phẩm tặng kèm (nếu có) trước khi tiến hành thanh toán</span>
-                        <button className='next-button' onClick={() => navigate('/checkout')}>
+                        <button className='next-button' onClick={handleCheckout}>
                             <span>TIẾN HÀNH THANH TOÁN</span> 
                             <RightOutlined className='right-icon' />
                         </button>

@@ -39,6 +39,7 @@ const HeaderComponent = () => {
     localStorage.removeItem('username');
     localStorage.removeItem('address');
     localStorage.removeItem('refresh_token');
+    localStorage.removeItem('selectedProducts');
     navigate('/');
     window.location.reload();
   }
@@ -104,8 +105,10 @@ const HeaderComponent = () => {
       <div className="announcement-header">MIỄN PHÍ GIAO HÀNG CHO ĐƠN HÀNG TỪ 499K</div>
       <div className="header">
         <Col span={8} onClick={() => navigate('/')}>
-          <img src={logo} alt="Logo" className="logo" />
-          <span className="brand-name">ARGIHUB</span>
+          <div className='logo-container__header'>
+            <img src={logo} alt="Logo" className="logo" />
+            <div className="brand-name">AGRIHUB</div>
+          </div>
         </Col>
         <Col span={8}>
             <Search 

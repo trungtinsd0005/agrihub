@@ -11,6 +11,8 @@ import SearchPage from "../pages/SearchPage/SearchPage";
 import TypePage from "../pages/TypePage/TypePage";
 import CartPage from "../pages/CartPage/CartPage";
 import CheckoutPage from "../pages/CheckoutPage/CheckoutPage";
+import ThankYouPage from "../pages/ThankYouPage/ThankYouPage";
+
 
 export const routes = [
     {
@@ -43,7 +45,8 @@ export const routes = [
     {
         path: '/profile-user',
         page: ProfilePage,
-        isShowHeader: true
+        isShowHeader: true,
+        isProtected: true
     },
     {
         path: '/system/user',
@@ -71,6 +74,10 @@ export const routes = [
         path: '/cart',
         page: CartPage,
         isShowHeader: true
+    },
+    {
+        path: '/thankyou',
+        page: ThankYouPage,
     },
     {
         path: '*',

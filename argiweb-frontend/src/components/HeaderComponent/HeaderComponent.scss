@@ -14,12 +14,18 @@
     display: flex;
     align-items: center;
 }
+
+.logo-container__header {
+    display: flex;
+    gap: 0px;
+}
   
 .brand-name {
     font-size: 18px;
     color: #fff;
     font-weight: bold;
-    margin-top: 20px;
+    transform: translateY(20%);
+    // margin-top: 20px;
 
     &:hover {
         cursor: pointer;
@@ -28,7 +34,7 @@
   
 .logo {
     height: 30px;
-    margin-right: 5px;
+    color: #fff;
 
     &:hover {
         cursor: pointer;

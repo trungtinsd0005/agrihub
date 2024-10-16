@@ -42,7 +42,9 @@
     font-weight: 500;
 }
 
-.menu-account div {
+.menu-account 
+    
+    div {
     display: block;
     border-bottom: 1px solid #F0F0F0;
     padding: 15px 5px 15px 25px;
@@ -50,14 +52,22 @@
     color: #545454;
     font-size: $font-size-base;
 
-    a {
-        color: #545454;
-        font-size: $font-size-base;
+        a {
+            color: #545454;
+            font-size: $font-size-base;
+            &:hover {
+                color: $primary-color;
+            }
+        }
+
         &:hover {
+            cursor: pointer;
             color: $primary-color;
         }
-    }
+}
 
+.menu-account .active-tab {
+    color: $primary-color;
 }
 
 .mr20 {
@@ -68,6 +78,7 @@
     color: #373737;
     margin-bottom: 20px;
     font-weight: 500;
+    font-size: 20px;
 }
 
 .ant-form-item-label {
@@ -78,4 +89,56 @@
     display: flex;
     margin: 0 auto;
     margin-top: 20px;
+}
+
+// Order Page
+.order-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.order-box {
+    padding: 20px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.product-name {
+    font-size: 16px;
+    max-width: 550px;
+}
+
+.product-price {
+    color: $primary-color;
+}
+
+.price-amount__container {
+    display: flex;
+    flex-direction:column;
+    align-items: center;
+}
+
+.tier-line {
+    margin: 4px 0;
+    border-bottom: 1px solid #d3d3d3;
+}
+
+.order__info-below, .order__info-above {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.order__total-price {
+    span {
+        color: $primary-color;
+        font-size: 17px;
+    }
+}
+
+.order-status {
+    color: $primary-color;
 }

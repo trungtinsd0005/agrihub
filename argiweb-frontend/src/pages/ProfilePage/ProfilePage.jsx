@@ -7,12 +7,14 @@ import BreadcrumbComponent from '../../components/BreadcrumbComponent/Breadcrumb
 import './ProfilePage.scss'
 import { UserOutlined, ShoppingCartOutlined, DollarOutlined, HeartOutlined, CommentOutlined, BellOutlined, LogoutOutlined } from '@ant-design/icons';
 import { updateUser, getDetailUser } from '../../services/UserService';
+import { getDetailOrder } from '../../services/OrderService';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { clearCart } from '../../redux/slides/cartSlide';
 
 
-import {Row, Col, Form, Input, Radio, DatePicker, Button, message, Spin, Select} from 'antd';
+import {Row, Col, Form, Input, Radio, DatePicker, Button, message, Spin, Select, Tabs, Image} from 'antd';
+import TabPane from 'antd/es/tabs/TabPane';
 const { Option } = Select;
 
 const ProfilePage = () => {
@@ -102,6 +104,7 @@ const ProfilePage = () => {
     localStorage.removeItem('access_token');
     localStorage.removeItem('username');
     localStorage.removeItem('refresh_token');
+    localStorage.removeItem('selectedProducts');
     navigate('/');
     window.location.reload();
   }
@@ -109,22 +112,39 @@ const ProfilePage = () => {
   const breadcrumbs = [
     { label: 'Trang chủ', path: '/' },
     { label: 'Tài khoản của tôi' },
-    { label: 'Thông tin của tôi' }
   ];
 
   const [activeTab, setActiveTab] = useState('info');
 
+  const [orderData, setOrderData] = useState([]);
+
+  useEffect(() => {
+    const fetchOrderDetails = async () => {
+      const userId = localStorage.getItem('userId');
+      if (userId) {
+        try {
+          const orders = await getDetailOrder(userId);
+          setOrderData(orders.data);
+        } catch (error) {
+          console.error('Error fetching order details:', error);
+        }
+      } else {
+        console.error('No userId found in localStorage');
+      }
+    };
+
+    fetchOrderDetails();
+  }, []);
 
   const renderContent = () => {
     if (!userData) {
       return <Spin tip="Đang tải thông tin..." />;
     }
-
     switch (activeTab) {
       case 'info':
         return (
           <Fragment>
-            <h2 className='profile-title'>Thông tin tài khoản</h2>
+            <div className='profile-title'>Thông tin tài khoản</div>
             <Form 
               onFinish={handleSubmit} 
               initialValues={{
@@ -201,7 +221,236 @@ const ProfilePage = () => {
           </Fragment>
         );
       case 'orders':
-        return <div>Đơn hàng của tôi</div>;
+        const filterOrdersByStatus = (status) => {
+          if (status === 'all') {
+              return orderData;
+          }
+          return orderData.filter((order) => order.status === status);
+        };
+
+        const getStatusLabel = (status) => {
+          switch (status) {
+            case 'pending':
+              return 'Chờ xác nhận';
+            case 'shipped':
+              return 'Chờ giao hàng';
+            case 'delivered':
+              return 'Hoàn thành';
+            case 'cancelled':
+              return 'Đã hủy';
+            default:
+              return status;
+          }
+        };
+
+        return (
+          <Tabs defaultActiveKey="1">
+            <TabPane tab="Tất cả" key="1">
+              {filterOrdersByStatus('all').length > 0 ? (
+                filterOrdersByStatus('all').map((item) => (
+                  <div className='order-box'>
+                    <div className='order__info-above'>
+                      <div className='order-id'>#{item._id.toUpperCase().slice(3, 4)}{item._id.toUpperCase().slice(-4)}</div>
+                      <div className='order-status'>{getStatusLabel(item.status)}</div>
+                    </div>
+                    {item.orderItems.map((orderItem) => (
+                      <div className='order-item'>
+                        <Image key={orderItem._id} src={orderItem.image} alt={orderItem.name} height={80} width={80} />
+                        <div className='product-name'>{orderItem.name}</div>
+                        <div className='price-amount__container'>
+                          <div className='product-price'>{orderItem.price.toLocaleString('vi-VN')} ₫</div>
+                          <div className='product-amount'>x{orderItem.amount}</div>
+                        </div>
+                      </div>
+                    ))}
+                    <div className='tier-line'></div>
+                    <div className='order__info-below'>
+                      <div className='order-time'>
+                        Đã đặt {" "}
+                        {new Date(item.createdAt).toLocaleString('vi-VN', {
+                          weekday: 'long',
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric',
+                          hour: 'numeric',
+                          minute: 'numeric',
+                        })}
+                      </div>
+                      <div className='order__total-price'>
+                        Thành tiền: <span>{item.totalPrice.toLocaleString('vi-VN')} ₫</span>
+                      </div>
+                    </div>
+                  </div>
+              ))
+              ) : (
+                <p>Không có đơn hàng nào</p>
+              )}
+            </TabPane>
+            <TabPane tab="Chờ xác nhận" key="2">
+              {filterOrdersByStatus('pending').length > 0 ? (
+                filterOrdersByStatus('pending').map((item) => (
+                  <div className='order-box'>
+                    <div className='order__info-above'>
+                      <div className='order-id'>#{item._id.toUpperCase().slice(3, 4)}{item._id.toUpperCase().slice(-4)}</div>
+                      <div className='order-status'>{getStatusLabel(item.status)}</div>
+                    </div>
+                    {item.orderItems.map((orderItem) => (
+                      <div className='order-item'>
+                        <Image key={orderItem._id} src={orderItem.image} alt={orderItem.name} height={80} width={80} />
+                        <div className='product-name'>{orderItem.name}</div>
+                        <div className='price-amount__container'>
+                          <div className='product-price'>{orderItem.price.toLocaleString('vi-VN')} ₫</div>
+                          <div className='product-amount'>x{orderItem.amount}</div>
+                        </div>
+                      </div>
+                    ))}
+                    <div className='tier-line'></div>
+                    <div className='order__info-below'>
+                      <div className='order-time'>
+                        Đã đặt {" "}
+                        {new Date(item.createdAt).toLocaleString('vi-VN', {
+                          weekday: 'long',
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric',
+                          hour: 'numeric',
+                          minute: 'numeric',
+                        })}
+                      </div>
+                      <div className='order__total-price'>
+                        Thành tiền: <span>{item.totalPrice.toLocaleString('vi-VN')} ₫</span>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p>Không có đơn hàng đang chờ xác nhận</p>
+              )}
+            </TabPane>
+            <TabPane tab="Chờ giao hàng" key="3">
+              {filterOrdersByStatus('shipped').length > 0 ? (
+                filterOrdersByStatus('shipped').map((item) => (
+                  <div className='order-box'>
+                    <div className='order__info-above'>
+                      <div className='order-id'>#{item._id.toUpperCase().slice(3, 4)}{item._id.toUpperCase().slice(-4)}</div>
+                      <div className='order-status'>{getStatusLabel(item.status)}</div>
+                    </div>
+                    {item.orderItems.map((orderItem) => (
+                      <div className='order-item'>
+                        <Image key={orderItem._id} src={orderItem.image} alt={orderItem.name} height={80} width={80} />
+                        <div className='product-name'>{orderItem.name}</div>
+                        <div className='price-amount__container'>
+                          <div className='product-price'>{orderItem.price.toLocaleString('vi-VN')} ₫</div>
+                          <div className='product-amount'>x{orderItem.amount}</div>
+                        </div>
+                      </div>
+                    ))}
+                    <div className='tier-line'></div>
+                    <div className='order__info-below'>
+                      <div className='order-time'>
+                        Đã đặt {" "}
+                        {new Date(item.createdAt).toLocaleString('vi-VN', {
+                          weekday: 'long',
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric',
+                          hour: 'numeric',
+                          minute: 'numeric',
+                        })}
+                      </div>
+                      <div className='order__total-price'>
+                        Thành tiền: <span>{item.totalPrice.toLocaleString('vi-VN')} ₫</span>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p>Không có đơn hàng đang chờ giao</p>
+              )}
+            </TabPane>
+            <TabPane tab="Hoàn thành" key="4">
+              {filterOrdersByStatus('delivered').length > 0 ? (
+                filterOrdersByStatus('delivered').map((item) => (
+                  <div className='order-box'>
+                    <div className='order__info-above'>
+                      <div className='order-id'>#{item._id.toUpperCase().slice(3, 4)}{item._id.toUpperCase().slice(-4)}</div>
+                      <div className='order-status'>{getStatusLabel(item.status)}</div>
+                    </div>
+                    {item.orderItems.map((orderItem) => (
+                      <div className='order-item'>
+                        <Image key={orderItem._id} src={orderItem.image} alt={orderItem.name} height={80} width={80} />
+                        <div className='product-name'>{orderItem.name}</div>
+                        <div className='price-amount__container'>
+                          <div className='product-price'>{orderItem.price.toLocaleString('vi-VN')} ₫</div>
+                          <div className='product-amount'>x{orderItem.amount}</div>
+                        </div>
+                      </div>
+                    ))}
+                    <div className='tier-line'></div>
+                    <div className='order__info-below'>
+                      <div className='order-time'>
+                        Đã đặt {" "}
+                        {new Date(item.createdAt).toLocaleString('vi-VN', {
+                          weekday: 'long',
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric',
+                          hour: 'numeric',
+                          minute: 'numeric',
+                        })}
+                      </div>
+                      <div className='order__total-price'>
+                        Thành tiền: <span>{item.totalPrice.toLocaleString('vi-VN')} ₫</span>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p>Không có đơn hàng hoàn thành</p>
+              )}
+            </TabPane>
+            <TabPane tab="Đã hủy" key="5">
+              {filterOrdersByStatus('cancelled').length > 0 ? (
+                filterOrdersByStatus('cancelled').map((item) => (
+                  <div className='order-box'>
+                    <div className='order__info-above'>
+                      <div className='order-id'>#{item._id.toUpperCase().slice(3, 4)}{item._id.toUpperCase().slice(-4)}</div>
+                      <div className='order-status'>{getStatusLabel(item.status)}</div>
+                    </div>
+                    {item.orderItems.map((orderItem) => (
+                      <div className='order-item'>
+                        <Image key={orderItem._id} src={orderItem.image} alt={orderItem.name} height={80} width={80} />
+                        <div className='product-name'>{orderItem.name}</div>
+                        <div className='price-amount__container'>
+                          <div className='product-price'>{orderItem.price.toLocaleString('vi-VN')} ₫</div>
+                          <div className='product-amount'>x{orderItem.amount}</div>
+                        </div>
+                      </div>
+                    ))}
+                    <div className='tier-line'></div>
+                    <div className='order__info-below'>
+                      <div className='order-time'>
+                        Đã đặt {" "}
+                        {new Date(item.createdAt).toLocaleString('en-GB', {
+                          year: 'numeric',
+                          month: '2-digit',
+                          day: '2-digit',
+                          hour: 'numeric',
+                          minute: 'numeric',
+                        })}
+                      </div>
+                      <div className='order__total-price'>
+                        Thành tiền: <span>{item.totalPrice.toLocaleString('vi-VN')} ₫</span>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p>Không có đơn hàng đã hủy</p>
+              )}
+            </TabPane>
+          </Tabs>
+        );
       case 'vouchers':
         return <div>Voucher của tôi</div>;
       case 'favorites':
@@ -228,12 +477,14 @@ const ProfilePage = () => {
                 <span className='t1'>{userData?.email}</span>
               </div>
               <div className="menu-account">
-                <div onClick={() => setActiveTab('info')}><UserOutlined /> Thông tin của tôi</div>
-                <div onClick={() => setActiveTab('orders')}><ShoppingCartOutlined /> Đơn hàng của tôi</div>
-                <div onClick={() => setActiveTab('vouchers')}><DollarOutlined /> Voucher của tôi</div>
-                <div onClick={() => setActiveTab('favorites')}><HeartOutlined /> Sản phẩm yêu thích</div>
-                <div onClick={() => setActiveTab('reviews')}><CommentOutlined /> Nhận xét của tôi</div>
-                <div onClick={() => setActiveTab('notifications')}><BellOutlined /> Thông báo của tôi</div>
+                <div onClick={() => setActiveTab('info')} className={activeTab === 'info' ? 'active-tab' : ''}>
+                  <UserOutlined /> Thông tin của tôi
+                </div>
+                <div onClick={() => setActiveTab('orders')} className={activeTab === 'orders' ? 'active-tab' : ''}><ShoppingCartOutlined /> Đơn hàng của tôi</div>
+                <div onClick={() => setActiveTab('vouchers')} className={activeTab === 'vouchers' ? 'active-tab' : ''}><DollarOutlined /> Voucher của tôi</div>
+                <div onClick={() => setActiveTab('favorites')} className={activeTab === 'favorites' ? 'active-tab' : ''}><HeartOutlined /> Sản phẩm yêu thích</div>
+                <div onClick={() => setActiveTab('reviews')} className={activeTab === 'reviews' ? 'active-tab' : ''}><CommentOutlined /> Nhận xét của tôi</div>
+                <div onClick={() => setActiveTab('notifications')} className={activeTab === 'notifications' ? 'active-tab' : ''}><BellOutlined /> Thông báo của tôi</div>
                 <div><a href='/' onClick={handleLogoutUser}><LogoutOutlined /> Đăng xuất</a></div>
               </div>
             </div>

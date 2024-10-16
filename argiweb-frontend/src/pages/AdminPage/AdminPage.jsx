@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { Layout, Menu, Popconfirm, message} from 'antd';
 import BreadcrumbComponent from '../../components/BreadcrumbComponent/BreadcrumbComponent';
-import { DashboardOutlined, UserOutlined, ProductOutlined, LogoutOutlined, HomeOutlined } from '@ant-design/icons';
+import { DashboardOutlined, UserOutlined, ProductOutlined, LogoutOutlined, HomeOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import logo from '../../assets/images/logobrand.png';
 import AdminDashBoardPage from '../AdminDashBoardPage/AdminDashBoardPage';
 import AdminUserPage from '../AdminUserPage/AdminUserPage';
 import AdminProductPage from '../AdminProductPage/AdminProductPage';
+import AdminOrderPage from '../AdminOrderPage/AdminOrderPage';
 import './AdminPage.scss'
 import { useNavigate } from 'react-router-dom';
 import { clearCart } from '../../redux/slides/cartSlide';
@@ -38,6 +39,9 @@ const AdminPage = () => {
       case '3':
         newBreadcrumbs.push({ label: 'Product'});
         break;
+      case '4':
+        newBreadcrumbs.push({ label: 'Order'});
+        break;
       default:
         break;
     }
@@ -52,6 +56,7 @@ const AdminPage = () => {
     localStorage.removeItem('access_token');
     localStorage.removeItem('username');
     localStorage.removeItem('refresh_token');
+    localStorage.removeItem('selectedProducts');
     navigate('/');
     window.location.reload();
   }
@@ -66,6 +71,10 @@ const AdminPage = () => {
         return (
           <AdminProductPage/>
         )
+      case '4':
+      return (
+        <AdminOrderPage/>
+      )
       default:
         return (
           <AdminDashBoardPage/>
@@ -79,7 +88,7 @@ const AdminPage = () => {
       <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
         <div className="container-logo"> 
           <img src={logo} alt="Logo" className="logo" />
-          <span className="brand-name">ARGIHUB</span>
+          <span className="brand-name">AGRIHUB</span>
         </div>
         <Menu theme="dark" mode="inline" selectedKeys={[selectedKey]} onClick={handleMenuClick}>
           <Menu.Item key="1" icon={<DashboardOutlined />}>
@@ -91,7 +100,10 @@ const AdminPage = () => {
           <Menu.Item key="3" icon={<ProductOutlined />}>
             Product
           </Menu.Item>
-          <Menu.Item key="4" icon={<HomeOutlined />}>
+          <Menu.Item key="4" icon={<ShoppingCartOutlined />}>
+            Order
+          </Menu.Item>
+          <Menu.Item key="5" icon={<HomeOutlined />}>
             <Popconfirm
               title="Bạn có chắc chắn muốn về trang chủ?"
               onConfirm={() => navigate('/')}
@@ -101,7 +113,7 @@ const AdminPage = () => {
               Home
             </Popconfirm>
           </Menu.Item>
-          <Menu.Item key="5" icon={<LogoutOutlined />}>
+          <Menu.Item key="6" icon={<LogoutOutlined />}>
             <Popconfirm
               title="Bạn có chắc chắn muốn đăng xuất?"
               onConfirm={handleLogoutUser}

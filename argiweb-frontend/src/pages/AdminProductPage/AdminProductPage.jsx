@@ -286,6 +286,7 @@ const AdminProductPage = () => {
         key: 'name',
         sorter: (a,b) => a.name.length - b.name.length,
         ...getColumnSearchProps('name'),
+        width: 300,
     },
     {
         title: 'Type',
@@ -295,29 +296,34 @@ const AdminProductPage = () => {
           .filter((type) => type)
           .map((type) => ({ text: type, value: type})),
         onFilter: (value, record) => record.type.indexOf(value) === 0,
+        width: 150,
     },
     {
         title: 'Price',
         dataIndex: 'price',
         key: 'price',
-        sorter: (a,b) => a.price - b.price
+        sorter: (a,b) => a.price - b.price,
+        width: 150,
     },
     {
         title: 'Count In Stock',
         dataIndex: 'countInStock',
         key: 'countInStock',
-        sorter: (a,b) => a.countInStock - b.countInStock
+        sorter: (a,b) => a.countInStock - b.countInStock,
+        width: 150,
     },
     {
         title: 'Description',
         dataIndex: 'description',
         key: 'description',
+        width: 250,
     },
     {
         title: 'Image',
         dataIndex: 'image',
         key: 'image',
         render: (text) => (text ? <img src={text} alt="product" style={{ width: '80px' }} /> : 'No Image'),
+        width: 200,
     },
     {
       title: 'Actions',
@@ -337,6 +343,7 @@ const AdminProductPage = () => {
           </Popconfirm>
         </div>
       ),
+      width: 200,
     },
   ];
 
@@ -441,8 +448,6 @@ const AdminProductPage = () => {
           <Form.Item 
             label="Upload Image"
             name="upload"
-            // valuePropName="fileList"
-            // getValueFromEvent={e => (Array.isArray(e) ? e : e && e.fileList)}
             rules={[{ required: false, message: 'Please upload image' }]}
           >  
             <Upload
@@ -458,8 +463,6 @@ const AdminProductPage = () => {
           <Form.Item 
             label="Upload Image"
             name="upload"
-            // valuePropName="fileList"
-            // getValueFromEvent={e => (Array.isArray(e) ? e : e && e.fileList)}
             rules={[{ required: true, message: 'Please upload image' }]}
           >  
             <Upload
