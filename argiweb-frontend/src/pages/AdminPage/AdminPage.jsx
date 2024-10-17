@@ -103,17 +103,7 @@ const AdminPage = () => {
           <Menu.Item key="4" icon={<ShoppingCartOutlined />}>
             Order
           </Menu.Item>
-          <Menu.Item key="5" icon={<HomeOutlined />}>
-            <Popconfirm
-              title="Bạn có chắc chắn muốn về trang chủ?"
-              onConfirm={() => navigate('/')}
-              okText="Có"
-              cancelText="Không"
-            >
-              Home
-            </Popconfirm>
-          </Menu.Item>
-          <Menu.Item key="6" icon={<LogoutOutlined />}>
+          <Menu.Item key="5" icon={<LogoutOutlined />}>
             <Popconfirm
               title="Bạn có chắc chắn muốn đăng xuất?"
               onConfirm={handleLogoutUser}

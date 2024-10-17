@@ -164,32 +164,115 @@ const AdminProductPage = () => {
     setFileList([]);
     form.resetFields();
   };
+  //   const image = fileList.length > 0 ? fileList[0].url || fileList[0].thumbUrl : '';
+  //   const additionalImages = additionalFileList.map(file => file.url || file.thumbUrl);
 
+  //   const newProduct = {
+  //     name: values.name,
+  //     type: values.newType || values.type,
+  //     price: values.price,
+  //     countInStock: values.countInStock,
+  //     description: values.description,
+  //     image: image,
+  //     additionalImages: additionalImages,
+  //   };
+
+  //   if (currentProduct) {
+  //     if (fileList.length > 0 && fileList[0].originFileObj) {
+  //       const formData = new FormData();
+  //       formData.append('image', fileList[0].originFileObj);
+
+  //       try {
+  //         const uploadResponse = await fetch('http://localhost:3001/api/image/upload', {
+  //           method: 'POST',
+  //           body: formData,
+  //         });
+
+  //         const uploadedImageData = await uploadResponse.json();
+  //         if (uploadedImageData.url) {
+  //           newProduct.image = uploadedImageData.url;
+  //         }
+  //       } catch (error) {
+  //         console.error('Failed to upload image:', error);
+  //       }
+  //     }
+  //     editProduct({ id: currentProduct._id, data: newProduct });
+  //   } else {
+  //     addProduct(newProduct);
+  //   }
+  //   setSelectedType('');
+  //   setIsNewTypeInputVisible(false);
+  //   handleCancel();
+  // };
+
+  const handleFormSubmit = async (values) => {
+    let image = '';
+    if (fileList.length > 0) {
+      if (fileList[0].originFileObj) {
+        const formData = new FormData();
+        formData.append('image', fileList[0].originFileObj);
   
-  const handleFormSubmit = (values) => {
-    const image = fileList.length > 0 ? fileList[0].url || fileList[0].thumbUrl : '';
-    const additionalImages = additionalFileList.map(file => file.url || file.thumbUrl);
+        try {
+          const uploadResponse = await fetch('http://localhost:3001/api/image/upload', {
+            method: 'POST',
+            body: formData,
+          });
+          const uploadedImageData = await uploadResponse.json();
+          if (uploadedImageData.url) {
+            image = uploadedImageData.url;
+          }
+        } catch (error) {
+          console.error('Failed to upload image:', error);
+        }
+      } else {
+        image = fileList[0].url || fileList[0].thumbUrl;
+      }
+    }
+  
+    let additionalImages = [];
+    for (const file of additionalFileList) {
+      if (file.originFileObj && !file.url) {
+        const formData = new FormData();
+        formData.append('image', file.originFileObj);
+  
+        try {
+          const uploadResponse = await fetch('http://localhost:3001/api/image/upload', {
+            method: 'POST',
+            body: formData,
+          });
+          const uploadedImageData = await uploadResponse.json();
+          if (uploadedImageData.url) {
+            additionalImages.push(uploadedImageData.url);
+          }
+        } catch (error) {
+          console.error(`Failed to upload additional image: ${file.name}`, error);
+        }
+      } else {
+        additionalImages.push(file.url || file.thumbUrl);
+      }
+    }
 
     const newProduct = {
-        name: values.name,
-        type: values.newType || values.type,
-        price: values.price,
-        countInStock: values.countInStock,
-        description: values.description,
-        image: image || '',
-        additionalImages: additionalImages,
+      name: values.name,
+      type: values.newType || values.type,
+      price: values.price,
+      countInStock: values.countInStock,
+      description: values.description,
+      image: image,
+      additionalImages: additionalImages,
     };
-
+  
     if (currentProduct) {
-        editProduct({ id: currentProduct._id, data: newProduct });
+      editProduct({ id: currentProduct._id, data: newProduct });
     } else {
-        addProduct(newProduct);
+      addProduct(newProduct);
     }
+  
     setSelectedType('');
     setIsNewTypeInputVisible(false);
     handleCancel();
   };
-
+  
   const handleDeleteMany = async () => {
     const confirmDelete = window.confirm('Are you sure you want to delete the selected products?');
     if (confirmDelete) {
@@ -347,12 +430,61 @@ const AdminProductPage = () => {
     },
   ];
 
-  const handleFileChange = ({ fileList: newFileList }) => {
+  const handleFileChange = async ({ fileList: newFileList }) => {
     setFileList(newFileList);
+    if (newFileList.length > 0) {
+      const formData = new FormData();
+      formData.append('image', newFileList[0].originFileObj);
+      
+      try {
+        const response = await fetch('http://localhost:3001/api/image/upload', {
+          method: 'POST',
+          body: formData,
+        });
+        
+        const data = await response.json();
+        if (data.url) {
+          setFileList([{ url: data.url }]);
+        } else {
+          message.error('Failed to upload image');
+        }
+      } catch (error) {
+        message.error('Failed to upload image');
+      }
+    }
   };
 
-  const handleAdditionalFileChange = ({ fileList: newFileList }) => {
-    setAdditionalFileList(newFileList);
+  const handleAdditionalFileChange = async ({ fileList: newFileList }) => {
+    const updatedFileList = [...newFileList];
+    setAdditionalFileList(updatedFileList);
+
+    for (const file of newFileList) {
+      if (file.originFileObj) {
+        const formData = new FormData();
+        formData.append('image', file.originFileObj);
+
+        try {
+          const response = await fetch('http://localhost:3001/api/image/upload', {
+            method: 'POST',
+            body: formData,
+          });
+
+          const data = await response.json();
+          if (data.url) {
+            const indexToUpdate = updatedFileList.findIndex(f => f.uid === file.uid);
+            if (indexToUpdate !== -1) {
+              updatedFileList[indexToUpdate].url = data.url;
+            }
+          } else {
+            message.error(`Failed to upload image: ${file.name}`);
+          }
+        } catch (error) {
+          message.error(`Failed to upload image: ${file.name}`);
+        }
+      }
+    }
+
+    setAdditionalFileList(updatedFileList);
   };
 
   return (
