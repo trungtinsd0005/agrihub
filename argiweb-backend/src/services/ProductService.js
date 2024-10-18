@@ -2,10 +2,9 @@ const Product = require("../models/ProductModel")
 
 const createProduct = (newProduct) => {
     return new Promise(async(resolve, reject) => {
-        const {name, image, type, price, countInStock, rating, selled, discount, description, additionalImages} = newProduct
         try {
             const checkNameProduct = await Product.findOne({
-                name: name
+                name: newProduct.name
             })
             if(checkNameProduct !== null) {
                 resolve({
@@ -13,18 +12,7 @@ const createProduct = (newProduct) => {
                     message: 'The name of product is already in use'
                 })
             }
-            const createdProduct = await Product.create({
-                name, 
-                image, 
-                type: type.toLowerCase(),
-                price, 
-                countInStock, 
-                rating: rating || 0.0,
-                selled: selled || 0,
-                discount: discount || 0,
-                description, 
-                additionalImages
-            })
+            const createdProduct = await Product.create(newProduct);
             if(createdProduct){
                 resolve({
                     status: 'OK',

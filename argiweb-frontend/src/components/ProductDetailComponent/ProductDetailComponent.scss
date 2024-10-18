@@ -269,3 +269,48 @@ a:hover {
     background-color: #f0f0f0;
 }
 
+// Details Product
+.mainContainer .box-tag {
+    border-bottom: 1px solid #f0f0f0;
+    margin-top: -20px;
+    margin-left: -20px;
+    margin-right: -20px;
+    width: 100%;
+}
+
+.tag {
+    color: #fff;
+    background-color: #10723A;
+    font-size: 18px;
+    font-weight: 500;
+    width: max-content;
+    padding: 20px;
+}
+
+.description-products__left {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.mt-20 {
+    margin-top: 20px;
+}
+
+.ml-20 {
+    margin-left: 20px;
+}
+
+.box-description {
+    padding: 20px;
+    border-bottom: 1px solid #ccc;
+    background-color: #EEEEEE;
+}
+
+.box-description:last-child {
+    border-bottom: none;
+}
+
+.description-title {
+    font-weight: 600;
+}
+

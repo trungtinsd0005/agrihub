@@ -113,101 +113,167 @@ const ProductDetailComponent = () => {
   };
 
   return (
-    <Row className="mainContainer">
-            <Col span={8}>
-                <Image src={product.image} width={400} height={400} alt={`${product.name} Image Large`} preview={false} />
-                <div className="imageContainer">
-                  <NavButtonComponent direction="prev" onClick={handlePrev}/>
-                  {product.additionalImages
-                    .slice(currentIndex, currentIndex + 4)
-                    .map((img, index) => (
-                      <Image className="addImages" src={img} alt={`Image small ${index + 1}`} preview={false} key={index} />
-                  ))}
-                  <NavButtonComponent direction="next" onClick={handleNext}/>
-                </div>
-            </Col>
-            <Col span={10} className="paddingSides">
-                <div className="infoDetail">
-                  <div className="titleProduct">
-                    {product.name}
-                  </div>
-                  <div className="divInline">
-                    <StarRating rating={product.rating}/>
-                    <div className="ratingReview"> 0 đánh giá</div>
-                    <div className="countSold">{product.selled} đã bán</div>
-                  </div>
-                  <div className="priceProducts">
-                    <strong>{product.price.toLocaleString('vi-VN')} ₫</strong>
-                  </div>
-                  <div className="tierPrice"></div>
-                  <Row>
-                    <Col span={7}>
-                      <div className="title">Vận chuyển đến:</div>
-                      <div className="title">Phí vận chuyển:</div>
-                    </Col>
-                    <Col span={17}>
-                      <div className="item">
-                        <div className="deliverySelect">
-                          <div className="customSelect" onClick={toggleDropdown}>
-                              {selectedDistrict ? `${selectedCity} - ${selectedDistrict}` : selectedCity || "Chọn Tỉnh / Thành phố"}
-                          </div>
-                          {isDropdownOpen && (
-                            <ul className="dropdownList">
-                              {selectedCity && (
-                                <div className="customDiv" onClick={resetSelection}>
-                                  <LeftOutlined /> {selectedCity}
-                                </div>
-                              )}
-                              {selectedCity
-                                ?
-                                  districtData.map((district) => (
-                                    <li key={district.Name} onClick={() => handleOptionChange(district.Name)}>
-                                      {`${selectedCity} - ${district.Name}`}
-                                    </li>
-                                  ))
-                                : cityData.map((city) => (
-                                  <li key={city.Name} onClick={() => handleOptionChange(city.Name)}>
-                                    {city.Name}
-                                  </li>
-                                ))}
-                            </ul>
+    <>
+      <Row className="mainContainer">
+        <Col span={8}>
+            <Image src={product.image} width={400} height={400} alt={`${product.name} Image Large`} preview={false} />
+            <div className="imageContainer">
+              <NavButtonComponent direction="prev" onClick={handlePrev}/>
+              {product.additionalImages
+                .slice(currentIndex, currentIndex + 4)
+                .map((img, index) => (
+                  <Image className="addImages" src={img} alt={`Image small ${index + 1}`} preview={false} key={index} />
+              ))}
+              <NavButtonComponent direction="next" onClick={handleNext}/>
+            </div>
+        </Col>
+        <Col span={10} className="paddingSides">
+            <div className="infoDetail">
+              <div className="titleProduct">
+                {product.name}
+              </div>
+              <div className="divInline">
+                <StarRating rating={product.rating}/>
+                <div className="ratingReview"> 0 đánh giá</div>
+                <div className="countSold">{product.selled} đã bán</div>
+              </div>
+              <div className="priceProducts">
+                <strong>{product.price.toLocaleString('vi-VN')} ₫</strong>
+              </div>
+              <div className="tierPrice"></div>
+              <Row>
+                <Col span={7}>
+                  <div className="title">Vận chuyển đến:</div>
+                  <div className="title">Phí vận chuyển:</div>
+                </Col>
+                <Col span={17}>
+                  <div className="item">
+                    <div className="deliverySelect">
+                      <div className="customSelect" onClick={toggleDropdown}>
+                          {selectedDistrict ? `${selectedCity} - ${selectedDistrict}` : selectedCity || "Chọn Tỉnh / Thành phố"}
+                      </div>
+                      {isDropdownOpen && (
+                        <ul className="dropdownList">
+                          {selectedCity && (
+                            <div className="customDiv" onClick={resetSelection}>
+                              <LeftOutlined /> {selectedCity}
+                            </div>
                           )}
-                        </div>
-                      </div>
-                      <div className="item">
-                        <div className="deliveryPrice">
-                          <span>40.000 ₫</span>
-                        </div>
-                      </div>
-                    </Col>
-                  </Row>
-                  <div className="quantityContainer">
-                    <div className="title">Số lượng:</div>
-                    <span>Chỉ còn {product.countInStock} sản phẩm;</span>
-                    <QuantityInput countInStock={product.countInStock} initialQuantity={1} onQuantityChange={setQuantity} />
-                  </div>
-                  <div className="buttonSection">
-                    <ButtonComponent label={"THÊM VÀO GIỎ HÀNG"} className="buttonAddToCart" onClick={() => handleAddToCart(product, quantity)} />
-                    <ButtonComponent label={"MUA NGAY"} className="buttonBuyNow" />
-                  </div>
-                </div>
-            </Col>
-            <Col span={6}>
-                <div className="rightInfo">
-                  <p className="moreInfoTag">
-                    Thông tin thêm:
-                  </p>
-                  <div className="tierPrice"></div>
-                  <div>
-                    <p className="contactUsTitle">Mua sỉ vui lòng liên hệ chúng tôi:</p>
-                    <div className="contactWrapper">
-                      <a className="contactUsBtn" href='tel:+84833577005'>0833 577 005</a>
-                      <a href="https://www.facebook.com" target="_blank" rel="noreferrer" className="contactByMess">Gửi tin nhắn</a>
+                          {selectedCity
+                            ?
+                              districtData.map((district) => (
+                                <li key={district.Name} onClick={() => handleOptionChange(district.Name)}>
+                                  {`${selectedCity} - ${district.Name}`}
+                                </li>
+                              ))
+                            : cityData.map((city) => (
+                              <li key={city.Name} onClick={() => handleOptionChange(city.Name)}>
+                                {city.Name}
+                              </li>
+                            ))}
+                        </ul>
+                      )}
                     </div>
                   </div>
+                  <div className="item">
+                    <div className="deliveryPrice">
+                      <span>40.000 ₫</span>
+                    </div>
+                  </div>
+                </Col>
+              </Row>
+              <div className="quantityContainer">
+                <div className="title">Số lượng:</div>
+                <span>Chỉ còn {product.countInStock} sản phẩm;</span>
+                <QuantityInput countInStock={product.countInStock} initialQuantity={1} onQuantityChange={setQuantity} />
+              </div>
+              <div className="buttonSection">
+                <ButtonComponent label={"THÊM VÀO GIỎ HÀNG"} className="buttonAddToCart" onClick={() => handleAddToCart(product, quantity)} />
+                <ButtonComponent label={"MUA NGAY"} className="buttonBuyNow" />
+              </div>
+            </div>
+        </Col>
+        <Col span={6}>
+            <div className="rightInfo">
+              <p className="moreInfoTag">
+                Thông tin thêm:
+              </p>
+              <div className="tierPrice"></div>
+              <div>
+                <p className="contactUsTitle">Mua sỉ vui lòng liên hệ chúng tôi:</p>
+                <div className="contactWrapper">
+                  <a className="contactUsBtn" href='tel:+84833577005'>0833 577 005</a>
+                  <a href="https://www.facebook.com" target="_blank" rel="noreferrer" className="contactByMess">Gửi tin nhắn</a>
                 </div>
-            </Col>
-    </Row>
+              </div>
+            </div>
+        </Col>
+      </Row>
+
+      <Row className="mainContainer">
+        <div className='box-tag'>
+          <div className='tag'>
+            Thông tin sản phẩm
+          </div>
+        </div>
+        <div className='tier'></div>
+        <Col span={14}>
+          <div className='description-products__left'>
+            {product.description}
+          </div>
+          <Image 
+            src={product.additionalImages[product.additionalImages.length - 2 || 0]} 
+            style={{ width: '100%', height: '100%' }}
+          />
+        </Col>
+        <Col span={10}>
+            <div className='ml-20 mt-20'>
+              <Row className='box-description'>
+                  <Col span={12} className='description-title'>Mã sản phẩm:</Col>
+                  <Col span={12} className='description-content'>{product._id}</Col>
+              </Row>
+              <Row className='box-description'>
+                  <Col span={12} className='description-title'>Xuất xứ:</Col>
+                  <Col span={12} className='description-content'>{product.origin}</Col>
+              </Row>
+              <Row className='box-description'>
+                  <Col span={12} className='description-title'>Thành phần:</Col>
+                  <Col span={12} className='description-content'>{product.ingredients}</Col>
+              </Row>
+              <Row className='box-description'>
+                  <Col span={12} className='description-title'>Hướng dẫn sử dụng:</Col>
+                  <Col span={12} className='description-content'>{product.usageInstructions}</Col>
+              </Row>
+              <Row className='box-description'>
+                  <Col span={12} className='description-title'>Hướng dẫn bảo quản:</Col>
+                  <Col span={12} className='description-content'>{product.storageInstructions}</Col>
+              </Row>
+              <Row className='box-description'>
+                  <Col span={12} className='description-title'>Trọng lượng:</Col>
+                  <Col span={12} className='description-content'>{product.weightProduct}</Col>
+              </Row>
+              {product.productionDate ? (
+                <Row className='box-description'>
+                  <Col span={12} className='description-title'>Ngày sản xuất:</Col>
+                  <Col span={12} className='description-content'>{product.productionDate}</Col>
+                </Row>
+              ) : (
+                ''
+              )}
+              {product.productionDate ? (
+                <Row className='box-description'>
+                  <Col span={12} className='description-title'>Hạn sử dụng:</Col>
+                  <Col span={12} className='description-content'>{product.expirationDate}</Col>
+                </Row>
+              ) : (
+                ''
+              )}
+
+            </div>
+        </Col>
+      </Row>
+
+    </>
   )
 }
 

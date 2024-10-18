@@ -260,6 +260,13 @@ const AdminProductPage = () => {
       description: values.description,
       image: image,
       additionalImages: additionalImages,
+      origin: values.origin,
+      productionDate: values.productionDate,
+      expirationDate: values.expirationDate,
+      ingredients: values.ingredients,
+      usageInstructions: values.usageInstructions,
+      storageInstructions: values.storageInstructions,
+      weightProduct: values.weightProduct
     };
   
     if (currentProduct) {
@@ -396,10 +403,10 @@ const AdminProductPage = () => {
         width: 150,
     },
     {
-        title: 'Description',
-        dataIndex: 'description',
-        key: 'description',
-        width: 250,
+        title: 'Origin',
+        dataIndex: 'origin',
+        key: 'origin',
+        width: 150,
     },
     {
         title: 'Image',
@@ -426,7 +433,7 @@ const AdminProductPage = () => {
           </Popconfirm>
         </div>
       ),
-      width: 200,
+      width: 250,
     },
   ];
 
@@ -544,12 +551,13 @@ const AdminProductPage = () => {
         visible={isModalVisible}
         onCancel={handleCancel}
         footer={null}
+        width={600}
       >
         <Form
           form={form}
           onFinish={handleFormSubmit}
-          labelCol={{ span: 6 }}
-          style={{margin: '0 10px', padding: '10px' }}
+          labelCol={{ span: 7 }}
+          style={{margin: '0 10px', padding: '5px'}}
         >
           <Form.Item name="name" label="Name" rules={[{ required: true, message: 'Please input the product name!' }]}>
             <Input />
@@ -617,6 +625,27 @@ const AdminProductPage = () => {
             >
               <Button icon={<UploadOutlined />}>Upload Additional Images</Button>
             </Upload>
+          </Form.Item>
+          <Form.Item name="origin" label="Origin">
+            <Input placeholder='Input the origin' />
+          </Form.Item>
+          <Form.Item name="productionDate" label="Production Date">
+            <Input placeholder='Input the Production Date'/>
+          </Form.Item>
+          <Form.Item name="expirationDate" label="Expiration Date">
+            <Input placeholder='Input the Expiration Date'/>
+          </Form.Item>
+          <Form.Item name="ingredients" label="Ingredients">
+            <Input placeholder='Input the Ingredients'/>
+          </Form.Item>
+          <Form.Item name="usageInstructions" label="Usage Instructions">
+            <Input placeholder='Input the Usage Instructions'/>
+          </Form.Item>
+          <Form.Item name="storageInstructions" label="Storage Instructions">
+            <Input placeholder='Input the Storage Instructions'/>
+          </Form.Item>
+          <Form.Item name="weightProduct" label="Weight of Product">
+            <Input placeholder='Input the Weight of Product'/>
           </Form.Item>
 
           <Form.Item>
