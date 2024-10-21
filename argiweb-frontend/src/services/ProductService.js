@@ -3,7 +3,8 @@ import axios from "axios";
 const apiClient = axios.create({
     baseURL: process.env.REACT_APP_API_KEY,
     headers: {
-        'Content-Type': 'application/json'
+      'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+      'Content-Type': 'application/json'
     }
 });
 
@@ -84,6 +85,19 @@ export const deleteProduct = async(id) => {
     return res.data;
   } catch (error) {
     console.error('Delete Product Error:', error.response ? error.response.data : error.message);
+    throw error;
+  }
+};
+
+export const createProductReview = async (productId, reviewData) => {
+  try {
+    const res = await apiClient.post(`/product/${productId}/review`, {
+      rating: reviewData.rating,
+      comment: reviewData.comment
+    });
+    return res.data;
+  } catch (error) {
+    console.error('Create Review Error:', error.response ? error.response.data : error.message);
     throw error;
   }
 };

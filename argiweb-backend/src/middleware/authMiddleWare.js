@@ -45,7 +45,28 @@ const authUserMiddleWare = (req, res, next) => {
     });
 }
 
+const protect = (req, res, next) => {
+    const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
+
+    if (!token) {
+        return res.status(401).json({ message: 'No token, authorization denied' });
+    }
+
+    try {
+        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN); 
+
+        req.user = decoded.payload; 
+        console.log('User in protect middleware:', req.user);
+
+        next();
+    } catch (error) {
+        console.error(error);
+        return res.status(401).json({ message: 'Token is not valid' });
+    }
+};
+
 module.exports = {
     authMiddleWare,
-    authUserMiddleWare
+    authUserMiddleWare,
+    protect
 }

@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import {Row, Col, Image, Spin, message} from 'antd';
-import {LeftOutlined} from '@ant-design/icons'
+import {Row, Col, Image, Spin, message, List, Progress, Button, Form, Rate} from 'antd';
+import {LeftOutlined, StarFilled} from '@ant-design/icons'
 import './ProductDetailComponent.scss'
 import QuantityInput from '../QuantityInput/QuantityInput';
 import NavButtonComponent from '../NavButtonComponent/NavButtonComponent';
 import ButtonComponent from '../ButtonComponent/ButtonComponent';
-import { getDetailProduct } from '../../services/ProductService';
+import { getDetailProduct, createProductReview } from '../../services/ProductService';
 import StarRating from '../StarRatingComponent/StarRating';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../../redux/slides/cartSlide'
+import TextArea from 'antd/es/input/TextArea';
 
 const ProductDetailComponent = () => {
   const { id } = useParams();
@@ -24,6 +25,9 @@ const ProductDetailComponent = () => {
   const [loading, setLoading] = useState(true);
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const dispatch = useDispatch();
+  const [reviewRating, setReviewRating] = useState(0);
+  const [reviewComment, setReviewComment] = useState('');
+  const [isReviewFormVisible, setReviewFormVisible] = useState(false);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -52,6 +56,37 @@ const ProductDetailComponent = () => {
 
     fetchCityData();
   }, []);
+
+  const submitReview = async () => {
+    const userName = localStorage.getItem('username');
+    const userId = localStorage.getItem('userId');
+
+    if (!userId) {
+      message.error('Vui lòng đăng nhập trước khi đánh giá sản phẩm');
+      return;
+    }
+    if (reviewRating === 0) {
+      message.error('Vui lòng chọn số sao để đánh giá!');
+      return;
+    }
+
+    if (!reviewComment.trim()) {
+      message.error('Vui lòng nhập bình luận!');
+      return;
+    }
+
+    try {
+      await createProductReview(id, { userId: userId, userName: userName, rating: reviewRating, comment: reviewComment });
+      message.success('Review submitted');
+      setReviewRating(0);
+      setReviewComment('');
+      const productData = await getDetailProduct(id);
+      setProduct(productData.data);
+    } catch (error) {
+      message.error(error.response?.data?.message || 'Error submitting review');
+    }
+    setReviewFormVisible(false);
+  };
 
   const toggleDropdown = () => {
     setDropdownOpen((prev) => !prev);
@@ -112,6 +147,14 @@ const ProductDetailComponent = () => {
       }
   };
 
+  const ratingsCount = product ? {
+    5: product.reviews.filter(review => review.rating === 5).length,
+    4: product.reviews.filter(review => review.rating === 4).length,
+    3: product.reviews.filter(review => review.rating === 3).length,
+    2: product.reviews.filter(review => review.rating === 2).length,
+    1: product.reviews.filter(review => review.rating === 1).length,
+  } : { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
+
   return (
     <>
       <Row className="mainContainer">
@@ -134,7 +177,7 @@ const ProductDetailComponent = () => {
               </div>
               <div className="divInline">
                 <StarRating rating={product.rating}/>
-                <div className="ratingReview"> 0 đánh giá</div>
+                <div className="ratingReview"> {product.numReviews} đánh giá</div>
                 <div className="countSold">{product.selled} đã bán</div>
               </div>
               <div className="priceProducts">
@@ -273,6 +316,100 @@ const ProductDetailComponent = () => {
         </Col>
       </Row>
 
+      <div className='mainContainer half-width'>
+        <div className='review-title'>Đánh giá sản phẩm</div>
+        <div className='box-border'>
+              <Row>
+                <Col span={5} className='form-review'>
+                  <div className='total-rating'>
+                    {product.rating.toFixed(1)} <StarFilled />
+                  </div>
+                </Col>
+                <Col span={12} style={{margin: '10px 0'}}>
+                  <List
+                    itemLayout="horizontal"
+                    dataSource={[5, 4, 3, 2, 1]}
+                    renderItem={(item) => (
+                      <List.Item>
+                        <List.Item.Meta
+                          title={
+                            <div className='container-list__review'>
+                              <span>{item} <StarFilled style={{ color: '#fd9727' }} /></span>
+                              <Progress 
+                                style={{ marginLeft: '10px', width: '60%' }} 
+                                percent={(ratingsCount[item] / product.numReviews) * 100 || 0}
+                                strokeColor="#f25800"
+                                showInfo={false} 
+                              />
+                              <span style={{ marginLeft: '10px' }}>{ratingsCount[item]} đánh giá</span>
+                            </div>
+                          }
+                        />
+                      </List.Item>
+                    )}
+                  />     
+                </Col>
+                <Col span={7} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
+                  <Button 
+                  type="primary" 
+                  className='button-review' onClick={() => setReviewFormVisible(!isReviewFormVisible)}
+                  style={{ 
+                    backgroundColor: isReviewFormVisible ? 'white' : '#0A923C', 
+                    color: isReviewFormVisible ? '#0A923C' : 'white',
+                    border: '1px solid #0A923C',
+                    boxShadow: 'none' 
+                  }} 
+                  >
+                    Gửi đánh giá của bạn
+                  </Button>
+                </Col>
+              </Row>
+              <Form layout="vertical" onFinish={submitReview}>
+                {isReviewFormVisible ? (
+                  <Row style={{height: 'max-content'}}>
+                        <Col span={24} style={{height: '35px'}}>
+                          <Form.Item required>
+                            <Rate onChange={(value) => setReviewRating(value)} value={reviewRating} />
+                          </Form.Item>       
+                        </Col>
+                        <Col span={12}>
+                          {reviewRating > 0 && (
+                          <Form.Item>
+                            <TextArea 
+                              rows={4} 
+                              onChange={(e) => setReviewComment(e.target.value)} 
+                              value={reviewComment}
+                              placeholder="Nhập bình luận"
+                            />
+                          </Form.Item>
+                          )}
+                        </Col>
+                        <Col span={10} style={{ marginLeft: '30px' }}>
+                          <Form.Item>
+                            <Button type="primary" htmlType="submit" className='custom-button__review'>
+                              Gửi đánh giá
+                            </Button>
+                          </Form.Item>
+                        </Col>
+                  </Row>
+                ) 
+                  : ''
+                }
+              </Form>
+        </div>
+        {product.reviews.map((review) => (
+        <div className='review-details'>
+          <div className='username__review'>
+            {review.name}
+          </div>
+          <StarRating rating={review.rating} />
+          <div className='reviews-date'>{new Date(review.createdAt).toLocaleDateString('vi-VN')}</div>
+          <div>
+            {review.comment}
+          </div>
+        </div>
+        ))}
+      </div>
     </>
   )
 }

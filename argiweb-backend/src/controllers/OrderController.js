@@ -1,4 +1,5 @@
 const Order = require('../models/OrderProduct');
+const Product = require('../models/ProductModel');
 
 const createOrder = async(req, res) => {
     try {
@@ -35,6 +36,14 @@ const createOrder = async(req, res) => {
             totalPrice,
             user: user || ''
         });
+
+        for (const item of orderProducts) {
+            console.log('Updating product with ID:', item.product);
+            const updatedProduct = await Product.findByIdAndUpdate(item.product, {
+                $inc: { selled: item.amount }
+            }, {new: true});
+            console.log('Updated Product:', updatedProduct);
+        }
 
         const createdOrder = await order.save();
         res.status(201).json({ message: 'Order created successfully', data: createdOrder });

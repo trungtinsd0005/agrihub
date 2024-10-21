@@ -10,6 +10,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useDispatch } from 'react-redux';
 import { addToCart } from "../../redux/slides/cartSlide";
 import dayjs from 'dayjs';
+import Chatbot from "../../components/ChatBot/ChatBot";
 
 const HomePage = () => {
     const [filterType, setFilterType] = useState('new');
@@ -57,7 +58,7 @@ const HomePage = () => {
                     return productDate.isAfter(today.subtract(7, 'days'));
                 });
             } else if (filterType === 'bestSeller') {
-                newFilteredProducts = products.data.filter(product => product.selled >= 10);
+                newFilteredProducts = products.data.filter(product => product.selled >= 2);
             }
             setFilteredProducts(newFilteredProducts);
         }
@@ -118,6 +119,7 @@ const HomePage = () => {
                                         type={product.type}
                                         selled={product.selled}
                                         discount={product.discount}
+                                        numReviews={product.numReviews}
                                         id={product._id}
                                         onAddToCart={() => handleAddToCart(product)}
                                     />
@@ -130,6 +132,7 @@ const HomePage = () => {
                     <NavButtonComponent direction="next" onClick={handleNext}/>
                 </div>
             </div>
+            <Chatbot />
         </WrapperBgColorComponent>
     )
 }

@@ -95,11 +95,13 @@ const loginUser = (userCredentials) => {
             const access_token = generateAccessToken({
                 id: checkUser._id,
                 isAdmin: checkUser.isAdmin,
+                name: checkUser.name
             })
 
             const refresh_token = generateRefreshToken({
                 id: checkUser._id,
                 isAdmin: checkUser.isAdmin,
+                name: checkUser.name
             })
 
             resolve({

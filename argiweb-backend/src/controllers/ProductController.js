@@ -1,4 +1,5 @@
 const ProductService = require('../services/ProductService')
+const Product = require("../models/ProductModel")
 
 
 const createProduct = async(req, res) => {
@@ -117,6 +118,46 @@ const getSearchProduct = async (req, res) => {
     }
 };
 
+const createProductReview = async (req, res) => {
+    const { rating, comment } = req.body;
+    const productId = req.params.id;
+    const user = req.user;
+
+    try {
+        const product = await Product.findById(productId);
+
+        if (!product) {
+            return res.status(404).json({ message: 'Không tìm thấy sản phẩm' });
+        }
+
+        const alreadyReviewed = product.reviews.find(
+            (review) => review.user.toString() === user.id.toString()
+        );
+
+        if (alreadyReviewed) {
+            return res.status(400).json({ message: 'Bạn đã đánh giá sản phẩm này rồi' });
+        }
+
+        const review = {
+            user: user.id,
+            name: user.name,
+            rating: Number(rating),
+            comment: comment,
+        };
+
+        product.reviews.push(review);
+        product.numReviews = product.reviews.length;
+        product.rating = product.reviews.reduce((acc, review) => review.rating + acc, 0) / product.reviews.length;
+
+        await product.save();
+
+        res.status(201).json({ message: 'Review added' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
 module.exports = {
     createProduct,
     updateProduct,
@@ -124,5 +165,6 @@ module.exports = {
     getDetailsProduct,
     getAllProduct,
     getAllType,
-    getSearchProduct
+    getSearchProduct,
+    createProductReview
 }
