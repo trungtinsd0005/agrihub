@@ -10,6 +10,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useDispatch } from 'react-redux';
 import { addToCart } from "../../redux/slides/cartSlide";
 import dayjs from 'dayjs';
+import imgSlider1 from '../../assets/images/imageSlider1.png'
+import imgSlider2 from '../../assets/images/imageSlider2.png'
 import Chatbot from "../../components/ChatBot/ChatBot";
 
 const HomePage = () => {
@@ -19,7 +21,11 @@ const HomePage = () => {
     const dispatch = useDispatch();
 
     const handleAddToCart = (product) => {
-        dispatch(addToCart(product));
+        const productWithQuantity = {
+            ...product,
+            quantity: 1
+        };
+        dispatch(addToCart(productWithQuantity));
     };
 
     const fetchProductAll = async() => {
@@ -58,7 +64,28 @@ const HomePage = () => {
                     return productDate.isAfter(today.subtract(7, 'days'));
                 });
             } else if (filterType === 'bestSeller') {
-                newFilteredProducts = products.data.filter(product => product.selled >= 2);
+                const salesThreshold = 1;
+                const salesWindowDays = 30;
+                const today = dayjs();
+
+                newFilteredProducts = products.data.filter(product => {
+                    const salesInLast30Days = product.salesHistory
+                        .filter(sale => today.diff(dayjs(sale.month), 'days') <= salesWindowDays)
+                        .reduce((total, sale) => total + sale.totalCount, 0);
+                    return salesInLast30Days >= salesThreshold;
+                });
+
+                newFilteredProducts.sort((a, b) => {
+                    const salesA = a.salesHistory
+                        .filter(sale => today.diff(dayjs(sale.month), 'days') <= salesWindowDays)
+                        .reduce((total, sale) => total + sale.totalCount, 0);
+                    const salesB = b.salesHistory
+                        .filter(sale => today.diff(dayjs(sale.month), 'days') <= salesWindowDays)
+                        .reduce((total, sale) => total + sale.totalCount, 0);
+                    return salesB - salesA;
+                });
+
+                newFilteredProducts = newFilteredProducts.slice(0, 12);
             }
             setFilteredProducts(newFilteredProducts);
         }
@@ -84,6 +111,12 @@ const HomePage = () => {
                 </div>
                 <div className="slider">
                     <SliderComponent />
+                </div>
+                <div className="image-column">
+                    <div className="img__slider-container">
+                        <img src={imgSlider1} alt="Hình slide 1" className="column-img" />
+                        <img src={imgSlider2} alt="Hình slide 2" className="column-img" />
+                    </div>
                 </div>
             </div>
             <div className="main-container">
@@ -120,6 +153,7 @@ const HomePage = () => {
                                         selled={product.selled}
                                         discount={product.discount}
                                         numReviews={product.numReviews}
+                                        salesHistory={product.salesHistory}
                                         id={product._id}
                                         onAddToCart={() => handleAddToCart(product)}
                                     />

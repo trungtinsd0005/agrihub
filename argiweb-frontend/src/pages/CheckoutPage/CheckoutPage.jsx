@@ -29,6 +29,7 @@ const CheckoutPage = () => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [selectedPayment, setSelectedPayment] = useState(null);
     const dispatch = useDispatch();
+    const [note, setNote] = useState("");
 
 
     useEffect(() => {
@@ -120,7 +121,9 @@ const CheckoutPage = () => {
     const { mutate: addOrder, isLoading: orderLoading } = useMutation({
         mutationFn: (orderData) => createOrder(orderData),
         onSuccess: (data) => {
-            console.log('Order created successfully');
+            const orderId = data.data._id;
+            console.log(orderId);
+            localStorage.setItem('latestOrderId', orderId);
             selectedProducts.forEach(product => {
                 dispatch(removeFromCart({ id: product.id }));
             });
@@ -137,10 +140,10 @@ const CheckoutPage = () => {
         const formData = form.getFieldsValue();
         const orderItems = selectedProducts.map(product => ({
             name: product.name,
-            amount: product.quantity, 
+            quantity: product.quantity, 
             image: product.image,
             price: product.price,
-            product: product.id
+            id: product.id
         }));
 
         const orderData = {
@@ -157,6 +160,7 @@ const CheckoutPage = () => {
             paymentMethod: selectedPayment,
             totalPrice: total,
             user: userId || '',
+            note
         };
         if (!orderData.orderProducts.length || !orderData.shippingInfo.fullName || !orderData.paymentMethod || !orderData.totalPrice) {
             console.log("Missing required fields");
@@ -323,7 +327,12 @@ const CheckoutPage = () => {
                         ) : (
                             ''
                         )}
-                        <Input.TextArea rows={2} placeholder="Nhập ghi chú của bạn tại đây" />
+                        <Input.TextArea 
+                            rows={2} 
+                            placeholder="Nhập ghi chú của bạn tại đây"
+                            value={note}
+                            onChange={(e) => setNote(e.target.value)}
+                        />
                     </div>
                     <div className="sec-box">
                         <div className="checkout__title">

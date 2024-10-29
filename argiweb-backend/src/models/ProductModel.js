@@ -12,6 +12,11 @@ const reviewSchema = new mongoose.Schema(
     }
 );
 
+const saleSchema = new mongoose.Schema({
+    totalCount: { type: Number, required: true },
+    month: { type: String, required: true },
+});
+
 const productSchema = new mongoose.Schema(
     {
         name: { type: String, required: true, unique: true },
@@ -23,7 +28,7 @@ const productSchema = new mongoose.Schema(
         rating: { type: Number, default: 0.0, min: 0.0, max: 5.0 },
         numReviews: { type: Number, default: 0 },
         description: { type: String },
-        selled: {type: Number, default: 0},
+        selled: { type: Number, default: 0},
         discount: {type: Number, default: 0},
         origin: { type: String },
         productionDate: { type: String },
@@ -33,6 +38,7 @@ const productSchema = new mongoose.Schema(
         storageInstructions: { type: String },
         weightProduct: { type: String },
         reviews: [reviewSchema],
+        salesHistory: [saleSchema],
     },
     {
         timestamps: true

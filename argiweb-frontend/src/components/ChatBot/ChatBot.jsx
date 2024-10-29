@@ -11,7 +11,7 @@ const ChatBot = () => {
   return (
     <div>
       <div className="chatbot-icon" onClick={toggleChatbot}>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/7/76/Chatbot_icon.svg" alt="Chatbot Icon" />
+        <img src="https://cdn-icons-png.freepik.com/512/13086/13086996.png" alt="Chatbot Icon" />
       </div>
 
       {isOpen && (

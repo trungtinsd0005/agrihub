@@ -8,7 +8,6 @@ const apiClient = axios.create({
 });
 
 
-
 export const loginUser = async (data) => {
   try {
     const res = await apiClient.post('/user/sign-in', data);

@@ -94,6 +94,12 @@ const AdminOrderPage = () => {
             width: 250,
         },
         {
+            title: 'Number Phone',
+            key: 'phone',
+            render: (record) => record.shippingAddress.phone,
+            width: 200,
+        },
+        {
             title: 'Total Price',
             dataIndex: 'totalPrice',
             key: 'totalPrice',
@@ -112,7 +118,9 @@ const AdminOrderPage = () => {
                         onChange={(value) => handleChangeStatus(record, value)}
                     >
                         <Option value="pending">Pending</Option>
+                        <Option value="processing">Processing</Option>
                         <Option value="shipped">Shipped</Option>
+                        <Option value="delivered">Delivered</Option>
                         <Option value="completed">Completed</Option>
                         <Option value="cancelled">Cancelled</Option>
                     </Select>
@@ -175,7 +183,9 @@ const AdminOrderPage = () => {
             <Tabs defaultActiveKey="all" onChange={handleTabChange}>
                 <Tabs.TabPane tab="All Orders" key="all" />
                 <Tabs.TabPane tab="Pending" key="pending" />
+                <Tabs.TabPane tab="Processing" key="processing" />
                 <Tabs.TabPane tab="Shipped" key="shipped" />
+                <Tabs.TabPane tab="Delivered" key="delivered" />
                 <Tabs.TabPane tab="Completed" key="completed" />
                 <Tabs.TabPane tab="Cancelled" key="cancelled" />
             </Tabs>
@@ -228,10 +238,11 @@ const AdminOrderPage = () => {
                                     <strong>Price:</strong> {item.price.toLocaleString('vi-VN')} VND
                                 </li>
                                 <li key={index}>
-                                    <strong>Amount:</strong> {item.amount} 
+                                    <strong>Amount:</strong> {item.quantity} 
                                 </li>
                             </ul>
                         ))}
+                        {selectedOrder.note && <p><strong>Order Note:</strong> {selectedOrder.note}</p>}
                     </div>
                 )}
             </Modal>

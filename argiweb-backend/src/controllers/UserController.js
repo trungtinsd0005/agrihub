@@ -1,7 +1,6 @@
 const UserService = require('../services/UserService')
 const JwtService = require('../services/JwtService')
 
-
 const createUser = async(req, res) => {
     try {
         const {name, email, password, confirmPassword, phone} = req.body
@@ -179,5 +178,5 @@ module.exports = {
     deleteUser,
     getAllUser,
     getDetailsUser,
-    refreshToken
+    refreshToken,
 }

@@ -97,11 +97,9 @@
     }
 }
 
-
-.tier-line {
-    margin-bottom: 10px;
-    padding-bottom: 8px;
-    border-bottom: 2px solid #333;
+.tier-line__cart {
+    border-bottom: 1px solid rgba(0, 0, 0, .09);;
+    margin: 20px 0 10px 0;
 }
 
 .custom-list {
@@ -111,8 +109,13 @@
 .name-item {
     width: 40%;
     font-size: 15px;
-    font-weight: 500;
+    font-weight: 600;
     color: #373737;
+
+    &:hover {
+        cursor: pointer;
+        color: #0a923c;
+    }
 }
 
 .price-delete-div {

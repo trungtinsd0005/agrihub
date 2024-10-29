@@ -61,8 +61,13 @@ const CartPage = () => {
         }
     };
 
-    const handleQuantityChange = (id, newQuantity) => {
-        dispatch(updateQuantity({ id, quantity: newQuantity }));
+    const handleQuantityChange = (name, newQuantity) => {
+        const item = cartItems.find(item => item.name === name);
+        if (newQuantity > item.countInStock) {
+            alert("Số lượng vượt quá số lượng tồn kho!");
+            return;
+        }
+        dispatch(updateQuantity({ name, quantity: newQuantity }));
     };
 
     const handleCheckout = () => {
@@ -95,19 +100,19 @@ const CartPage = () => {
                                 Xóa
                             </div>
                         </div>
-                        <div className='tier-line'></div>
+                        <div className='tier-line__cart'></div>
                         <div className='main-container'>
                             <List className='custom-list'>
                                 {cartItems.length > 0 ? (
                                     cartItems.map((item) => (
-                                        <List.Item key={item.id}>
+                                        <List.Item key={item.id} className='list-item__cart'>
                                             <div 
                                             className={`square-div ${selectedItems.has(item.id) ? 'selected' : ''}`} 
                                             onClick={() => handleToggleSelect(item.id)}>
                                                 {selectedItems.has(item.id) ? '✓' : ''}
                                             </div>
                                             <Image src={item.image} alt={item.name} width={100} height={100} />
-                                            <span className='name-item'>{item.name}</span>
+                                            <span className='name-item' onClick={() => navigate(`/product/${item.id}`)}>{item.name}</span>
                                             <div className='price-delete-div'>
                                                 <span className='price-item'>{item.price.toLocaleString('vi-VN')} ₫</span>
                                                 <DeleteOutlined className='delete-item' onClick={() => handleRemoveItem(item.id)} />
@@ -116,7 +121,7 @@ const CartPage = () => {
                                                 countInStock={item.countInStock} 
                                                 initialQuantity={item.quantity > item.countInStock ? item.countInStock : item.quantity} 
                                                 itemId={item.id}
-                                                onQuantityChange={(newQuantity) => handleQuantityChange(item.id, newQuantity)}
+                                                onQuantityChange={(newQuantity) => handleQuantityChange(item.name, newQuantity)}
                                             />
                                         </List.Item>
                                     ))

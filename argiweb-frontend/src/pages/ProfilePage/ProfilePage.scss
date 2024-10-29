@@ -120,8 +120,8 @@
     align-items: center;
 }
 
-.tier-line {
-    margin: 4px 0;
+.tier-line__order {
+    margin: 10px 0;
     border-bottom: 1px solid #d3d3d3;
 }
 
@@ -141,4 +141,54 @@
 
 .order-status {
     color: $primary-color;
+}
+
+.button-order-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+    align-items: center;
+}
+
+.button-order-container.has-message {
+    justify-content: space-between;
+}
+
+.button-order-container p {
+    font-size: 12px;
+    max-width: 300px;
+    color: rgba(0, 0, 0, 0.54);
+}
+
+.custom-button__Order {
+    padding: 20px;
+    margin-left: 10px;
+    border-radius: 0px;
+}
+
+.primary-color {
+    background-color: #0A923C;
+    color: #fff;
+
+    &:hover {
+        background-color: #10723C !important;
+        color: #fff !important;
+    }
+
+}
+
+// Modal Review Product
+.container_choseReviewProduct {
+    padding: 10px;
+    text-align: center;
+
+    .button_choseReviewProduct {
+        padding: 20px;
+        margin-bottom: 10px;
+    }
+
+    span {
+        text-align: center;
+        font-size: 18px;
+    }
 }

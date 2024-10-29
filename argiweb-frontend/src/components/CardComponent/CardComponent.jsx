@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux';
 import { addToCart } from '../../redux/slides/cartSlide'
 
 const CardComponent = (props) => {
-  const {countInStock, description, image, name, price, rating, type, label, selled, discount, id, numReviews} = props
+  const {countInStock, image, name, price, rating, selled, id, numReviews} = props
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -35,7 +35,7 @@ const CardComponent = (props) => {
       <StarRating rating={rating} />
       <span className='number-rating'>({ numReviews || 0})</span>
     </div>
-    <p className='sold-count'>Đã bán {selled || 1000}</p>
+    <p className='sold-count'>Đã bán {selled}</p>
     <div className='price-cart'>
       <p className='price-product'>{price.toLocaleString('vi-VN')} ₫</p>
       <div className="custom-cart-icon" onClick={handleAddToCart}>

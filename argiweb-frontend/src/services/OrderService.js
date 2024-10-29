@@ -27,6 +27,16 @@ export const getDetailOrder = async(userId) => {
   }
 };
 
+export const getDetailOrderByOrderId = async(orderId) => {
+  try {
+    const res = await apiClient.get(`/order/get-detail-order/${orderId}`);
+    return res.data;
+  } catch (error) {
+    console.error('Get Detail Order by OrderID Error:', error.response ? error.response.data : error.message);
+    throw error;
+  }
+};
+
 export const getAllOrder = async() => {
   try {
     const res = await apiClient.get('/order/get-all');
@@ -46,3 +56,24 @@ export const updateOrderStatus = async (id, data) => {
       throw error;
   }
 };
+
+export const cancelOrder = async (id) => {
+  try {
+    const res = await apiClient.put(`/order/cancel/${id}`);
+    return res.data;
+  } catch (error) {
+    console.error('Cancel Order Error:', error.response ? error.response.data : error.message);
+    throw error;
+  }
+};
+
+export const confirmOrderReceived = async (id) => {
+  try {
+    const res = await apiClient.put(`/order/confirm-received/${id}`);
+    return res.data;
+  } catch (error) {
+    console.error('Confirm Order Received Error:', error.response ? error.response.data : error.message);
+    throw error;
+  }
+};
+

@@ -1,5 +1,6 @@
 const ProductService = require('../services/ProductService')
 const Product = require("../models/ProductModel")
+const Order = require("../models/OrderProduct")
 
 
 const createProduct = async(req, res) => {
@@ -128,6 +129,16 @@ const createProductReview = async (req, res) => {
 
         if (!product) {
             return res.status(404).json({ message: 'Không tìm thấy sản phẩm' });
+        }
+
+        const orderWithProduct = await Order.findOne({
+            user: user.id,
+            "orderItems.id": productId,
+            isPaid: true
+        });
+
+        if (!orderWithProduct) {
+            return res.status(400).json({ message: 'Bạn cần mua sản phẩm này trước khi đánh giá' });
         }
 
         const alreadyReviewed = product.reviews.find(

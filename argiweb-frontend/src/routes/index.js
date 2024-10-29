@@ -1,6 +1,5 @@
 import HomePage from "../pages/HomePage/HomePage";
 import NotFoundPage from "../pages/NotFoundPage/NotFoundPage";
-import OrderPage from "../pages/OrderPage/OrderPage";
 import ProductsPage from "../pages/ProductsPage/ProductsPage";
 import ProfilePage from "../pages/ProfilePage/ProfilePage";
 import AdminPage from "../pages/AdminPage/AdminPage";
@@ -12,6 +11,7 @@ import TypePage from "../pages/TypePage/TypePage";
 import CartPage from "../pages/CartPage/CartPage";
 import CheckoutPage from "../pages/CheckoutPage/CheckoutPage";
 import ThankYouPage from "../pages/ThankYouPage/ThankYouPage";
+import OrderDetailsPage from "../pages/OrderDetailsPage/OrderDetailsPage";
 
 
 export const routes = [
@@ -19,12 +19,6 @@ export const routes = [
         path: '/',
         page: HomePage,
         isShowHeader: true
-    },
-    {
-        path: '/order',
-        page: OrderPage,
-        isShowHeader: true,
-        isProtected: true
     },
     {
         path: '/checkout',
@@ -76,8 +70,14 @@ export const routes = [
         isShowHeader: true
     },
     {
+        path: '/order-details/:orderId',
+        page: OrderDetailsPage,
+        isShowHeader: true
+    },
+    {
         path: '/thankyou',
         page: ThankYouPage,
+        isProtected: true
     },
     {
         path: '*',

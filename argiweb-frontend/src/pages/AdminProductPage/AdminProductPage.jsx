@@ -164,46 +164,6 @@ const AdminProductPage = () => {
     setFileList([]);
     form.resetFields();
   };
-  //   const image = fileList.length > 0 ? fileList[0].url || fileList[0].thumbUrl : '';
-  //   const additionalImages = additionalFileList.map(file => file.url || file.thumbUrl);
-
-  //   const newProduct = {
-  //     name: values.name,
-  //     type: values.newType || values.type,
-  //     price: values.price,
-  //     countInStock: values.countInStock,
-  //     description: values.description,
-  //     image: image,
-  //     additionalImages: additionalImages,
-  //   };
-
-  //   if (currentProduct) {
-  //     if (fileList.length > 0 && fileList[0].originFileObj) {
-  //       const formData = new FormData();
-  //       formData.append('image', fileList[0].originFileObj);
-
-  //       try {
-  //         const uploadResponse = await fetch('http://localhost:3001/api/image/upload', {
-  //           method: 'POST',
-  //           body: formData,
-  //         });
-
-  //         const uploadedImageData = await uploadResponse.json();
-  //         if (uploadedImageData.url) {
-  //           newProduct.image = uploadedImageData.url;
-  //         }
-  //       } catch (error) {
-  //         console.error('Failed to upload image:', error);
-  //       }
-  //     }
-  //     editProduct({ id: currentProduct._id, data: newProduct });
-  //   } else {
-  //     addProduct(newProduct);
-  //   }
-  //   setSelectedType('');
-  //   setIsNewTypeInputVisible(false);
-  //   handleCancel();
-  // };
 
   const handleFormSubmit = async (values) => {
     let image = '';
@@ -582,7 +542,7 @@ const AdminProductPage = () => {
             <Input type="number" />
           </Form.Item>
           <Form.Item name="description" label="Description" rules={[{ required: true, message: 'Please input the description' }]}>
-            <Input />
+            <Input.TextArea rows={4} placeholder="Enter product description" />
           </Form.Item>
           {currentProduct ? 
           <Form.Item 
@@ -636,13 +596,13 @@ const AdminProductPage = () => {
             <Input placeholder='Input the Expiration Date'/>
           </Form.Item>
           <Form.Item name="ingredients" label="Ingredients">
-            <Input placeholder='Input the Ingredients'/>
+            <Input.TextArea rows={4} placeholder='Input the Ingredients'/>
           </Form.Item>
           <Form.Item name="usageInstructions" label="Usage Instructions">
-            <Input placeholder='Input the Usage Instructions'/>
+            <Input.TextArea rows={4} placeholder='Input the Usage Instructions'/>
           </Form.Item>
           <Form.Item name="storageInstructions" label="Storage Instructions">
-            <Input placeholder='Input the Storage Instructions'/>
+            <Input.TextArea rows={4} placeholder='Input the Storage Instructions'/>
           </Form.Item>
           <Form.Item name="weightProduct" label="Weight of Product">
             <Input placeholder='Input the Weight of Product'/>

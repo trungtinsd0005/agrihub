@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import {Row, Col, Image, Spin, message, List, Progress, Button, Form, Rate} from 'antd';
 import {LeftOutlined, StarFilled} from '@ant-design/icons'
 import './ProductDetailComponent.scss'
@@ -28,12 +28,16 @@ const ProductDetailComponent = () => {
   const [reviewRating, setReviewRating] = useState(0);
   const [reviewComment, setReviewComment] = useState('');
   const [isReviewFormVisible, setReviewFormVisible] = useState(false);
+  const [mainImage, setMainImage] = useState('');
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
         const res = await getDetailProduct(id)
         setProduct(res.data);
+        setMainImage(res.data.image);
       } catch (error) {
         console.error('Lỗi khi tải dữ liệu sản phẩm:', error);
       }
@@ -147,6 +151,29 @@ const ProductDetailComponent = () => {
       }
   };
 
+  const handleImageClick = (img) => {
+    setMainImage(img);
+  };
+
+  const handleBuyNow = () => {
+    const selectedProduct = {
+        id: product._id,
+        name: product.name,
+        price: product.price,
+        image: product.image,
+        countInStock: product.countInStock,
+        quantity: quantity
+    };
+
+    localStorage.setItem('selectedProducts', JSON.stringify([selectedProduct]));
+
+    if (quantity > 0) {
+        navigate('/checkout');
+    } else {
+        alert("Vui lòng chọn số lượng sản phẩm trước khi tiến hành thanh toán");
+    }
+  };
+
   const ratingsCount = product ? {
     5: product.reviews.filter(review => review.rating === 5).length,
     4: product.reviews.filter(review => review.rating === 4).length,
@@ -155,20 +182,23 @@ const ProductDetailComponent = () => {
     1: product.reviews.filter(review => review.rating === 1).length,
   } : { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
 
+
   return (
     <>
       <Row className="mainContainer">
         <Col span={8}>
-            <Image src={product.image} width={400} height={400} alt={`${product.name} Image Large`} preview={false} />
-            <div className="imageContainer">
-              <NavButtonComponent direction="prev" onClick={handlePrev}/>
-              {product.additionalImages
-                .slice(currentIndex, currentIndex + 4)
-                .map((img, index) => (
-                  <Image className="addImages" src={img} alt={`Image small ${index + 1}`} preview={false} key={index} />
-              ))}
-              <NavButtonComponent direction="next" onClick={handleNext}/>
-            </div>
+            <Image src={mainImage} width={400} height={400} alt={`${product.name} Image Large`} preview={false} />
+            {product.additionalImages && product.additionalImages.length > 0 && (
+              <div className="imageContainer">
+                <NavButtonComponent direction="prev" onClick={handlePrev}/>
+                {product.additionalImages
+                  .slice(currentIndex, currentIndex + 4)
+                  .map((img, index) => (
+                    <Image className="addImages" src={img} alt={`Image small ${index + 1}`} onClick={() => handleImageClick(img)} preview={false} key={index} />
+                ))}
+                <NavButtonComponent direction="next" onClick={handleNext}/>
+              </div>
+            )}
         </Col>
         <Col span={10} className="paddingSides">
             <div className="infoDetail">
@@ -232,7 +262,7 @@ const ProductDetailComponent = () => {
               </div>
               <div className="buttonSection">
                 <ButtonComponent label={"THÊM VÀO GIỎ HÀNG"} className="buttonAddToCart" onClick={() => handleAddToCart(product, quantity)} />
-                <ButtonComponent label={"MUA NGAY"} className="buttonBuyNow" />
+                <ButtonComponent label={"MUA NGAY"} className="buttonBuyNow" onClick={handleBuyNow} />
               </div>
             </div>
         </Col>
@@ -262,10 +292,16 @@ const ProductDetailComponent = () => {
         <div className='tier'></div>
         <Col span={14}>
           <div className='description-products__left'>
-            {product.description}
+            {product.description.trim().split('.').filter(item => item.trim() !== '').map((sentence, index) => (
+              <li key={index}>
+                {sentence.trim()}.
+              </li>
+            ))}
           </div>
           <Image 
-            src={product.additionalImages[product.additionalImages.length - 2 || 0]} 
+            src={product.additionalImages && product.additionalImages.length > 1 
+              ? product.additionalImages[product.additionalImages.length - 2] 
+              : product.image} 
             style={{ width: '100%', height: '100%' }}
           />
         </Col>
@@ -280,12 +316,26 @@ const ProductDetailComponent = () => {
                   <Col span={12} className='description-content'>{product.origin}</Col>
               </Row>
               <Row className='box-description'>
-                  <Col span={12} className='description-title'>Thành phần:</Col>
-                  <Col span={12} className='description-content'>{product.ingredients}</Col>
+                <Col span={12} className='description-title'>Thành phần:</Col>
+                <Col 
+                  span={12} 
+                  className='description-content'>
+                  {product.ingredients.trim().split('.').filter(item => item.trim() !== '').map((sentence, index) => (
+                    <div key={index}>
+                      - {sentence.trim()}.
+                    </div>
+                  ))}
+                </Col>
               </Row>
               <Row className='box-description'>
                   <Col span={12} className='description-title'>Hướng dẫn sử dụng:</Col>
-                  <Col span={12} className='description-content'>{product.usageInstructions}</Col>
+                  <Col span={12} className='description-content'>
+                  {product.usageInstructions.trim().split('.').filter(item => item.trim() !== '').map((sentence, index) => (
+                    <div key={index}>
+                      {sentence.trim()}.
+                    </div>
+                  ))}
+                  </Col>
               </Row>
               <Row className='box-description'>
                   <Col span={12} className='description-title'>Hướng dẫn bảo quản:</Col>
@@ -325,7 +375,7 @@ const ProductDetailComponent = () => {
                     {product.rating.toFixed(1)} <StarFilled />
                   </div>
                 </Col>
-                <Col span={12} style={{margin: '10px 0'}}>
+                <Col span={12} className='col-review__productDetail'>
                   <List
                     itemLayout="horizontal"
                     dataSource={[5, 4, 3, 2, 1]}

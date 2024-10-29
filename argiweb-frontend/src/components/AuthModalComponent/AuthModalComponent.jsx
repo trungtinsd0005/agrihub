@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { Modal, Tabs, Form, Input, Button, message } from 'antd';
 import sideImage from '../../assets/images/imageLogin.png';
@@ -33,11 +33,9 @@ const AuthModalComponent = ({ visible, onCancel }) => {
                     localStorage.setItem('access_token', data.access_token);
                     localStorage.setItem('refresh_token', data.refresh_token);
                     localStorage.setItem('userId', data._id);
-                    localStorage.setItem('address', data.address);
 
                     const userId = data._id;
                     const savedCart = JSON.parse(localStorage.getItem(`cart_${userId}`)) || [];
-                    console.log('Saved Cart:', savedCart);
                     if (Array.isArray(savedCart)) {
                         dispatch(initializeCart(savedCart));
                     } else {
@@ -61,6 +59,8 @@ const AuthModalComponent = ({ visible, onCancel }) => {
         });
     };
 
+
+
     const onRegisterFinish = (values) => {
         mutateSignup(values, {
             onSuccess: (data) => {
@@ -77,7 +77,8 @@ const AuthModalComponent = ({ visible, onCancel }) => {
                 message.error('Lỗi hệ thống, vui lòng thử lại sau.');
             }
         });
-    };
+    };    
+    
 
     return (
         <Modal
@@ -155,6 +156,7 @@ const AuthModalComponent = ({ visible, onCancel }) => {
                                     <Input placeholder="Số điện thoại" />
                                 </Form.Item>
 
+
                                 <Form.Item
                                     name="email"
                                     rules={[
@@ -194,9 +196,10 @@ const AuthModalComponent = ({ visible, onCancel }) => {
                                     <Input.Password placeholder="Xác nhận mật khẩu" />
                                 </Form.Item>
 
+
                                 <Form.Item>
                                     <Button type="primary" htmlType="submit" className="register-button">
-                                        Đăng Ký
+                                        Đăng ký
                                     </Button>
                                 </Form.Item>
                             </Form>

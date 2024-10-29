@@ -30,6 +30,7 @@ const HeaderComponent = () => {
   const cartItems = useSelector((state) => state.cart.items);
   const cartCount = cartItems.length;
   const dispatch = useDispatch();
+  const userId = localStorage.getItem('userId');
 
 
   const handleLogoutUser = () => {
@@ -40,6 +41,7 @@ const HeaderComponent = () => {
     localStorage.removeItem('address');
     localStorage.removeItem('refresh_token');
     localStorage.removeItem('selectedProducts');
+    localStorage.removeItem(`cart_${userId}`);
     navigate('/');
     window.location.reload();
   }

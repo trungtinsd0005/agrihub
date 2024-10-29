@@ -6,7 +6,7 @@
     width: 60px;
     height: 60px;
     cursor: pointer;
-    z-index: 9999;
+    z-index: 1000;
   }
   
   .chatbot-icon img {
@@ -14,27 +14,24 @@
     height: 100%;
   }
   
-  /* Định dạng cho cửa sổ chatbot */
   .chatbot-window {
     position: fixed;
-    bottom: 80px;
-    right: 20px;
+    bottom: 90px;
+    right: 30px;
     width: 350px;
     height: 430px;
-    border: 2px solid #ccc;
-    z-index: 9999;
+    z-index: 1001;
     background-color: white;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
     border-radius: 10px;
     overflow: hidden;
   }
   
-  /* Nút đóng cửa sổ chatbot */
   .close-btn {
     position: absolute;
-    top: 5px;
-    right: 5px;
-    background-color: red;
+    top: 10px;
+    right: 10px;
+    background-color: orangered;
     color: white;
     border: none;
     border-radius: 50%;
@@ -42,6 +39,6 @@
     height: 25px;
     font-size: 14px;
     cursor: pointer;
-    z-index: 9999;
+    z-index: 1002;
   }
   

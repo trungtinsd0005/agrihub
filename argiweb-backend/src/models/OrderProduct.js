@@ -4,10 +4,10 @@ const orderSchema = new mongoose.Schema({
     orderItems: [
         {
             name: { type: String, required: true },
-            amount: { type: Number, required: true },
+            quantity: { type: Number, required: true },
             image: { type: String, required: true },
             price: { type: Number, required: true },
-            product: { type: String, require: true }, 
+            id: { type: String, require: true }, 
         },
     ],
     shippingAddress: {
@@ -22,13 +22,14 @@ const orderSchema = new mongoose.Schema({
     paymentMethod: { type: String, required: true },
     totalPrice: { type: Number, required: true },
     user: { type: String},
+    note: { type: String, default: null },
     isPaid: { type: Boolean, default: false },
     paidAt: { type: Date },
     isDelivered: { type: Boolean, default: false },
     deliveredAt: { type: Date },
     status: { 
         type: String, 
-        enum: ['pending', 'shipped', 'completed', 'cancelled'], 
+        enum: ['pending', 'processing', 'shipped', 'delivered', 'completed', 'cancelled'],
         default: 'pending' 
     },
 },

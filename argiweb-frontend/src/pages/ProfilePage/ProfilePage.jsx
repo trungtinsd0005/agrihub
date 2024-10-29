@@ -7,13 +7,13 @@ import BreadcrumbComponent from '../../components/BreadcrumbComponent/Breadcrumb
 import './ProfilePage.scss'
 import { UserOutlined, ShoppingCartOutlined, DollarOutlined, HeartOutlined, CommentOutlined, BellOutlined, LogoutOutlined } from '@ant-design/icons';
 import { updateUser, getDetailUser } from '../../services/UserService';
-import { getDetailOrder } from '../../services/OrderService';
+import { getDetailOrder, cancelOrder, confirmOrderReceived } from '../../services/OrderService';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { clearCart } from '../../redux/slides/cartSlide';
+import { clearCart, addToCart } from '../../redux/slides/cartSlide';
 
 
-import {Row, Col, Form, Input, Radio, DatePicker, Button, message, Spin, Select, Tabs, Image} from 'antd';
+import {Row, Col, Form, Input, Radio, DatePicker, Button, message, Spin, Select, Tabs, Image, Modal} from 'antd';
 import TabPane from 'antd/es/tabs/TabPane';
 const { Option } = Select;
 
@@ -26,6 +26,8 @@ const ProfilePage = () => {
   const userId = localStorage.getItem('userId');
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -98,6 +100,65 @@ const ProfilePage = () => {
     mutate(updatedData);
   };
 
+  const handleCancelOrder = async (orderId) => {
+    try {
+      const result = await cancelOrder(orderId);
+      alert(result.message || 'Đơn hàng đã được hủy');
+    } catch (error) {
+      alert('Lỗi khi hủy đơn hàng');
+    }
+  };
+
+  const handleReview = (orderItem) => {
+    if (orderItem.length === 1) {
+      const item = orderItem[0];
+      navigate(`/product/${item.id}`);
+    } else {
+      setSelectedProduct(orderItem);
+      setIsModalVisible(true);
+    }
+  }
+
+  const handleProductSelect = (productId) => {
+    setIsModalVisible(false);
+    navigate(`/product/${productId}`);
+  }
+
+  const renderReviewModal = () => (
+    <Modal
+      title="Chọn sản phẩm để đánh giá"
+      visible={isModalVisible}
+      onCancel={() => setIsModalVisible(false)}
+      footer={null}
+    >
+      {selectedProduct && selectedProduct.map((item) => (
+        <div key={item.id} className='container_choseReviewProduct'>
+          <Button className='button_choseReviewProduct' onClick={() => handleProductSelect(item.id)}>
+            <span>{item.name}</span>
+          </Button>
+        </div>
+      ))}
+    </Modal>
+  );
+
+  const handleConfirmReceived = async (orderId) => {
+    try {
+      const result = await confirmOrderReceived(orderId);
+      alert(result.message || 'Đơn hàng đã được xác nhận nhận hàng thành công');
+    } catch (error) {
+      alert('Lỗi khi xác nhận đơn hàng');
+    }
+  };
+
+  const handleRepurchase = (orderItems) => {
+    orderItems.forEach(item => {
+      const itemWithQuantity = { ...item };
+      dispatch(addToCart(itemWithQuantity));
+    });
+    navigate('/cart');
+  };
+  
+
   const handleLogoutUser = () => {
     dispatch(clearCart());
     localStorage.removeItem('userId');
@@ -134,7 +195,7 @@ const ProfilePage = () => {
     };
 
     fetchOrderDetails();
-  }, []);
+  }, [orderData]);
 
   const renderContent = () => {
     if (!userData) {
@@ -232,9 +293,13 @@ const ProfilePage = () => {
           switch (status) {
             case 'pending':
               return 'Chờ xác nhận';
+            case 'processing':
+            return 'Đang xử lý';
             case 'shipped':
-              return 'Chờ giao hàng';
+              return 'Đang giao hàng';
             case 'delivered':
+              return 'Đã giao hàng';
+            case 'completed':
               return 'Hoàn thành';
             case 'cancelled':
               return 'Đã hủy';
@@ -243,212 +308,89 @@ const ProfilePage = () => {
           }
         };
 
+        const renderOrderList = (orders) => {
+          if (orders.length === 0) {
+            return <p>Không có đơn hàng</p>;
+          }
+        
+          return orders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map((item) => (
+            <div className='order-box' key={item._id}>
+              <div className='order__info-above'>
+                <div className='order-id'>#{item._id.toUpperCase().slice(3, 4)}{item._id.toUpperCase().slice(-4)}</div>
+                <div className='order-status'>{getStatusLabel(item.status)}</div>
+              </div>
+              {item.orderItems.map((orderItem) => (
+                <div className='order-item' key={orderItem._id}>
+                  <Image src={orderItem.image} alt={orderItem.name} height={80} width={80} />
+                  <div className='product-name'>{orderItem.name}</div>
+                  <div className='price-quantity__container'>
+                    <div className='product-price'>{orderItem.price.toLocaleString('vi-VN')} ₫</div>
+                    <div className='product-quantity'>x{orderItem.quantity || orderItem.amount}</div>
+                  </div>
+                </div>
+              ))}
+              <div className='tier-line__order'></div>
+              <div className='order__info-below'>
+                <div className='order-time'>
+                  Đã đặt {" "}
+                  {new Date(item.createdAt).toLocaleString('vi-VN', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: 'numeric',
+                    minute: 'numeric',
+                  })}
+                </div>
+                <div className='order__total-price'>
+                  Thành tiền: <span>{item.totalPrice.toLocaleString('vi-VN')} ₫</span>
+                </div>
+              </div>
+                {item.isDelivered && 
+                <div className='order-time__container'>
+                  <div>
+                    Đã giao {new Date(item.deliveredAt).toLocaleString('vi-VN', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: 'numeric',
+                    minute: 'numeric',
+                  })}
+                  </div>
+                </div>
+                }
+              <div className={`button-order-container ${item.isDelivered ? 'has-message' : ''}`}>
+                {item.isDelivered && <p>Vui lòng chỉ nhấn "Đã nhận được hàng" khi đơn hàng đã được giao đến bạn và sản phẩm nhận được không có vấn đề nào.</p>}
+                {item.status === 'pending' && (
+                  <Button className='custom-button__Order' onClick={() => handleCancelOrder(item._id)}>Hủy Đơn Hàng</Button>
+                )}
+                {item.status === 'delivered' && (
+                  <Button className='custom-button__Order' onClick={() => handleConfirmReceived(item._id)}>Đã nhận được hàng</Button>
+                )}
+                {item.status === 'cancelled' ? (
+                  <Button className='custom-button__Order' onClick={() => handleRepurchase(item.orderItems)}>Mua lại</Button>
+                ) : item.status === 'completed' ? (
+                  <div>
+                    <Button className='custom-button__Order primary-color' onClick={() => handleReview(item.orderItems)}>Đánh giá</Button>
+                    <Button className='custom-button__Order' onClick={() => handleRepurchase(item.orderItems)}>Mua lại</Button>
+                  </div>
+                ) : null}
+              </div>
+            </div>
+          ));
+        };
+
         return (
           <Tabs defaultActiveKey="1">
-            <TabPane tab="Tất cả" key="1">
-              {filterOrdersByStatus('all').length > 0 ? (
-                filterOrdersByStatus('all').map((item) => (
-                  <div className='order-box'>
-                    <div className='order__info-above'>
-                      <div className='order-id'>#{item._id.toUpperCase().slice(3, 4)}{item._id.toUpperCase().slice(-4)}</div>
-                      <div className='order-status'>{getStatusLabel(item.status)}</div>
-                    </div>
-                    {item.orderItems.map((orderItem) => (
-                      <div className='order-item'>
-                        <Image key={orderItem._id} src={orderItem.image} alt={orderItem.name} height={80} width={80} />
-                        <div className='product-name'>{orderItem.name}</div>
-                        <div className='price-amount__container'>
-                          <div className='product-price'>{orderItem.price.toLocaleString('vi-VN')} ₫</div>
-                          <div className='product-amount'>x{orderItem.amount}</div>
-                        </div>
-                      </div>
-                    ))}
-                    <div className='tier-line'></div>
-                    <div className='order__info-below'>
-                      <div className='order-time'>
-                        Đã đặt {" "}
-                        {new Date(item.createdAt).toLocaleString('vi-VN', {
-                          weekday: 'long',
-                          year: 'numeric',
-                          month: 'long',
-                          day: 'numeric',
-                          hour: 'numeric',
-                          minute: 'numeric',
-                        })}
-                      </div>
-                      <div className='order__total-price'>
-                        Thành tiền: <span>{item.totalPrice.toLocaleString('vi-VN')} ₫</span>
-                      </div>
-                    </div>
-                  </div>
-              ))
-              ) : (
-                <p>Không có đơn hàng nào</p>
-              )}
-            </TabPane>
-            <TabPane tab="Chờ xác nhận" key="2">
-              {filterOrdersByStatus('pending').length > 0 ? (
-                filterOrdersByStatus('pending').map((item) => (
-                  <div className='order-box'>
-                    <div className='order__info-above'>
-                      <div className='order-id'>#{item._id.toUpperCase().slice(3, 4)}{item._id.toUpperCase().slice(-4)}</div>
-                      <div className='order-status'>{getStatusLabel(item.status)}</div>
-                    </div>
-                    {item.orderItems.map((orderItem) => (
-                      <div className='order-item'>
-                        <Image key={orderItem._id} src={orderItem.image} alt={orderItem.name} height={80} width={80} />
-                        <div className='product-name'>{orderItem.name}</div>
-                        <div className='price-amount__container'>
-                          <div className='product-price'>{orderItem.price.toLocaleString('vi-VN')} ₫</div>
-                          <div className='product-amount'>x{orderItem.amount}</div>
-                        </div>
-                      </div>
-                    ))}
-                    <div className='tier-line'></div>
-                    <div className='order__info-below'>
-                      <div className='order-time'>
-                        Đã đặt {" "}
-                        {new Date(item.createdAt).toLocaleString('vi-VN', {
-                          weekday: 'long',
-                          year: 'numeric',
-                          month: 'long',
-                          day: 'numeric',
-                          hour: 'numeric',
-                          minute: 'numeric',
-                        })}
-                      </div>
-                      <div className='order__total-price'>
-                        Thành tiền: <span>{item.totalPrice.toLocaleString('vi-VN')} ₫</span>
-                      </div>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <p>Không có đơn hàng đang chờ xác nhận</p>
-              )}
-            </TabPane>
-            <TabPane tab="Chờ giao hàng" key="3">
-              {filterOrdersByStatus('shipped').length > 0 ? (
-                filterOrdersByStatus('shipped').map((item) => (
-                  <div className='order-box'>
-                    <div className='order__info-above'>
-                      <div className='order-id'>#{item._id.toUpperCase().slice(3, 4)}{item._id.toUpperCase().slice(-4)}</div>
-                      <div className='order-status'>{getStatusLabel(item.status)}</div>
-                    </div>
-                    {item.orderItems.map((orderItem) => (
-                      <div className='order-item'>
-                        <Image key={orderItem._id} src={orderItem.image} alt={orderItem.name} height={80} width={80} />
-                        <div className='product-name'>{orderItem.name}</div>
-                        <div className='price-amount__container'>
-                          <div className='product-price'>{orderItem.price.toLocaleString('vi-VN')} ₫</div>
-                          <div className='product-amount'>x{orderItem.amount}</div>
-                        </div>
-                      </div>
-                    ))}
-                    <div className='tier-line'></div>
-                    <div className='order__info-below'>
-                      <div className='order-time'>
-                        Đã đặt {" "}
-                        {new Date(item.createdAt).toLocaleString('vi-VN', {
-                          weekday: 'long',
-                          year: 'numeric',
-                          month: 'long',
-                          day: 'numeric',
-                          hour: 'numeric',
-                          minute: 'numeric',
-                        })}
-                      </div>
-                      <div className='order__total-price'>
-                        Thành tiền: <span>{item.totalPrice.toLocaleString('vi-VN')} ₫</span>
-                      </div>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <p>Không có đơn hàng đang chờ giao</p>
-              )}
-            </TabPane>
-            <TabPane tab="Hoàn thành" key="4">
-              {filterOrdersByStatus('delivered').length > 0 ? (
-                filterOrdersByStatus('delivered').map((item) => (
-                  <div className='order-box'>
-                    <div className='order__info-above'>
-                      <div className='order-id'>#{item._id.toUpperCase().slice(3, 4)}{item._id.toUpperCase().slice(-4)}</div>
-                      <div className='order-status'>{getStatusLabel(item.status)}</div>
-                    </div>
-                    {item.orderItems.map((orderItem) => (
-                      <div className='order-item'>
-                        <Image key={orderItem._id} src={orderItem.image} alt={orderItem.name} height={80} width={80} />
-                        <div className='product-name'>{orderItem.name}</div>
-                        <div className='price-amount__container'>
-                          <div className='product-price'>{orderItem.price.toLocaleString('vi-VN')} ₫</div>
-                          <div className='product-amount'>x{orderItem.amount}</div>
-                        </div>
-                      </div>
-                    ))}
-                    <div className='tier-line'></div>
-                    <div className='order__info-below'>
-                      <div className='order-time'>
-                        Đã đặt {" "}
-                        {new Date(item.createdAt).toLocaleString('vi-VN', {
-                          weekday: 'long',
-                          year: 'numeric',
-                          month: 'long',
-                          day: 'numeric',
-                          hour: 'numeric',
-                          minute: 'numeric',
-                        })}
-                      </div>
-                      <div className='order__total-price'>
-                        Thành tiền: <span>{item.totalPrice.toLocaleString('vi-VN')} ₫</span>
-                      </div>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <p>Không có đơn hàng hoàn thành</p>
-              )}
-            </TabPane>
-            <TabPane tab="Đã hủy" key="5">
-              {filterOrdersByStatus('cancelled').length > 0 ? (
-                filterOrdersByStatus('cancelled').map((item) => (
-                  <div className='order-box'>
-                    <div className='order__info-above'>
-                      <div className='order-id'>#{item._id.toUpperCase().slice(3, 4)}{item._id.toUpperCase().slice(-4)}</div>
-                      <div className='order-status'>{getStatusLabel(item.status)}</div>
-                    </div>
-                    {item.orderItems.map((orderItem) => (
-                      <div className='order-item'>
-                        <Image key={orderItem._id} src={orderItem.image} alt={orderItem.name} height={80} width={80} />
-                        <div className='product-name'>{orderItem.name}</div>
-                        <div className='price-amount__container'>
-                          <div className='product-price'>{orderItem.price.toLocaleString('vi-VN')} ₫</div>
-                          <div className='product-amount'>x{orderItem.amount}</div>
-                        </div>
-                      </div>
-                    ))}
-                    <div className='tier-line'></div>
-                    <div className='order__info-below'>
-                      <div className='order-time'>
-                        Đã đặt {" "}
-                        {new Date(item.createdAt).toLocaleString('en-GB', {
-                          year: 'numeric',
-                          month: '2-digit',
-                          day: '2-digit',
-                          hour: 'numeric',
-                          minute: 'numeric',
-                        })}
-                      </div>
-                      <div className='order__total-price'>
-                        Thành tiền: <span>{item.totalPrice.toLocaleString('vi-VN')} ₫</span>
-                      </div>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <p>Không có đơn hàng đã hủy</p>
-              )}
-            </TabPane>
+            {['Tất cả', 'Chờ xác nhận', 'Đang xử lý', 'Chờ giao hàng', 'Đã giao hàng', 'Hoàn thành', 'Đã hủy'].map((label, index) => {
+              const statusKeys = ['all', 'pending', 'processing', 'shipped', 'delivered', 'cancelled'];
+              return (
+                <TabPane tab={label} key={index + 1}>
+                  {renderOrderList(filterOrdersByStatus(statusKeys[index]))}
+                </TabPane>
+              );
+            })}
           </Tabs>
         );
       case 'vouchers':
@@ -492,6 +434,7 @@ const ProfilePage = () => {
           <Col span={16}>
             <div className='widget'>
               {renderContent()}
+              {renderReviewModal()}
             </div>
           </Col>
         </Row>
@@ -499,8 +442,5 @@ const ProfilePage = () => {
     </WrapperBgColorComponent>
   )
 }
-
-
-
 
 export default ProfilePage
