@@ -1,194 +1,235 @@
-@import '../../../src/assets/styles/variables.scss';
+@import "../../../src/assets/styles/variables.scss";
 
 .container {
-    max-width: 1200px;
+  max-width: 1200px;
 }
 
 .widget {
-    margin-bottom: 30px;
-    padding: 20px;
-    border-radius: 5px;
-    overflow: hidden;
-    background-color: $white-color;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.06);
+  margin-bottom: 30px;
+  border-radius: 5px;
+  overflow: hidden;
+  background-color: $white-color;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.06);
 }
 
 .uname {
-    padding: 15px 5px 15px 25px;
-    margin-bottom: 0;
+  padding: 15px 5px 15px 25px;
+  margin-bottom: 0;
 }
 
-.t1, .t2 {
-    display: block;
+.t1,
+.t2 {
+  display: block;
 }
 
 .t1 {
-    font-size: $font-size-base;
-    color: $text-color;
+  font-size: $font-size-base;
+  color: $text-color;
 }
 
 .t2 {
-    font-size: $font-size-large;
-    color: $primary-color;
-    margin-bottom: 15px;
-    margin-top: 5px;
+  font-size: $font-size-large;
+  color: $primary-color;
+  margin-bottom: 15px;
+  margin-top: 5px;
 }
 
 .semi-bold {
-    font-weight: 600;
+  font-weight: 600;
+}
+
+.p10 {
+  padding: 10px;
+}
+
+.p10-lr {
+  padding: 0 10px;
+}
+
+.p10-tb {
+  padding: 10px 0;
+}
+
+.p20 {
+  padding: 20px;
+}
+
+.p20-lr {
+  padding: 0 20px;
+}
+
+.p20-tb {
+  padding: 20px 0;
 }
 
 .medium {
-    font-weight: 500;
+  font-weight: 500;
 }
 
-.menu-account 
-    
-    div {
-    display: block;
-    border-bottom: 1px solid #F0F0F0;
-    padding: 15px 5px 15px 25px;
-    margin-bottom: 0;
+.menu-account div {
+  display: block;
+  padding: 15px 5px 15px 25px;
+  margin-bottom: 0;
+  color: #545454;
+  font-size: $font-size-base;
+
+  a {
     color: #545454;
     font-size: $font-size-base;
+    &:hover {
+      color: $primary-color;
+    }
+  }
 
-        a {
-            color: #545454;
-            font-size: $font-size-base;
-            &:hover {
-                color: $primary-color;
-            }
-        }
+  &:hover {
+    cursor: pointer;
+    color: $primary-color;
+  }
+}
 
-        &:hover {
-            cursor: pointer;
-            color: $primary-color;
-        }
+.bgColor {
+  background-color: #eee;
 }
 
 .menu-account .active-tab {
-    color: $primary-color;
+  color: $primary-color;
+}
+
+.mb20 {
+  margin-bottom: 20px;
+}
+
+.mt20 {
+  margin-top: 20px;
 }
 
 .mr20 {
-    margin-right: 20px;
+  margin-right: 20px;
 }
 
 .profile-title {
-    color: #373737;
-    margin-bottom: 20px;
-    font-weight: 500;
-    font-size: 20px;
+  color: #373737;
+  margin-bottom: 20px;
+  font-weight: 500;
+  font-size: 20px;
 }
 
 .ant-form-item-label {
-    text-align: left !important;
+  text-align: left !important;
 }
 
 .button-save {
-    display: flex;
-    margin: 0 auto;
-    margin-top: 20px;
+  display: flex;
+  margin: 0 auto;
+  margin-top: 20px;
 }
 
 // Order Page
 .order-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .order-box {
-    padding: 20px;
-    margin-bottom: 15px;
-    border-radius: 8px;
-    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .product-name {
-    font-size: 16px;
-    max-width: 550px;
+  font-size: 16px;
+  max-width: 550px;
 }
 
 .product-price {
-    color: $primary-color;
+  color: $primary-color;
 }
 
 .price-amount__container {
-    display: flex;
-    flex-direction:column;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .tier-line__order {
-    margin: 10px 0;
-    border-bottom: 1px solid #d3d3d3;
+  margin: 10px 0;
+  border-bottom: 1px solid #d3d3d3;
 }
 
-.order__info-below, .order__info-above {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 5px;
+.order__info-below,
+.order__info-above {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
 }
 
 .order__total-price {
-    span {
-        color: $primary-color;
-        font-size: 17px;
-    }
+  span {
+    color: $primary-color;
+    font-size: 17px;
+  }
 }
 
 .order-status {
-    color: $primary-color;
+  color: $primary-color;
 }
 
 .button-order-container {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 10px;
-    align-items: center;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+  align-items: center;
 }
 
 .button-order-container.has-message {
-    justify-content: space-between;
+  justify-content: space-between;
+}
+
+.inlineDiv {
+  display: inline-block;
 }
 
 .button-order-container p {
-    font-size: 12px;
-    max-width: 300px;
-    color: rgba(0, 0, 0, 0.54);
+  font-size: 13px;
+  max-width: 300px;
+  color: rgba(0, 0, 0, 0.54);
+  flex: 1;
+  transform: translateY(10%);
 }
 
 .custom-button__Order {
-    padding: 20px;
-    margin-left: 10px;
-    border-radius: 0px;
+  padding: 20px;
+  margin-left: 10px;
+  border-radius: 0px;
 }
 
 .primary-color {
-    background-color: #0A923C;
-    color: #fff;
+  background-color: #0a923c;
+  border: 1px solid #0a923c;
+  color: #fff;
 
-    &:hover {
-        background-color: #10723C !important;
-        color: #fff !important;
-    }
-
+  &:hover {
+    background-color: #10723c !important;
+    color: #fff !important;
+  }
 }
 
 // Modal Review Product
 .container_choseReviewProduct {
-    padding: 10px;
+  padding: 10px;
+  text-align: center;
+
+  .button_choseReviewProduct {
+    padding: 20px;
+    margin-bottom: 10px;
+  }
+
+  span {
     text-align: center;
-
-    .button_choseReviewProduct {
-        padding: 20px;
-        margin-bottom: 10px;
-    }
-
-    span {
-        text-align: center;
-        font-size: 18px;
-    }
+    font-size: 18px;
+  }
 }

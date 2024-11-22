@@ -1,82 +1,84 @@
 .card-container {
-    width: 180px;
+  padding: 1px;
+  width: 180px;
 }
 
 .ant-card-body {
-    padding: 10px 15px !important;
+  padding: 10px 15px !important;
 }
 
 .rating {
-    display: flex;
+  display: flex;
 }
 
 .name-card {
-    font-size: 15px;
-    margin: 0 0 5px;
-    color: #373737;
-    font-weight: 700;
-    display: block;
-    height: 45px;
-    text-overflow: ellipsis;
-    overflow: hidden;
+  font-size: 15px;
+  margin: 0 0 5px;
+  color: #373737;
+  font-weight: 700;
+  display: block;
+  height: 45px;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .star-icon {
-    font-size: 14px;
-    color: #ffc107;
+  font-size: 14px;
+  color: #ffc107;
 }
 
 .number-rating {
-    margin-left: 5px;
-    font-size: 14px;
-    color: #10723A;
+  margin-left: 5px;
+  font-size: 14px;
+  color: #10723a;
 }
 
 .sold-count {
-    font-size: 14px;
-    color: #10723A;
+  font-size: 14px;
+  color: #10723a;
 }
 
 .price-cart {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
 
 .price-product {
-    display: inline-block;
-    vertical-align: middle;
-    font-size: 17px;
-    color: #10723A;
-    font-weight: bold;
-    line-height: 15px;
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 17px;
+  color: #10723a;
+  font-weight: bold;
+  line-height: 15px;
 }
 
 .custom-cart-icon {
-    position: relative;
-    display: inline-block;
-    transform: translateY(-25%);
-    border: 1px solid #0A923C;
-    border-radius: 5px;
+  position: relative;
+  display: inline-block;
+  transform: translateY(-25%);
+  border: 1px solid #0a923c;
+  border-radius: 5px;
 
-    &:hover {
-        background-color: #0A923C;
-        .cart-icon, .plus-icon {  
-            color: white;
-        }
+  &:hover {
+    background-color: #0a923c;
+    .cart-icon,
+    .plus-icon {
+      color: white;
     }
+  }
 }
 
 .cart-icon {
-    font-size: 30px;
-    border-radius: 5px;
-    color:#10723A;
-    padding: 0 6px;
+  font-size: 30px;
+  border-radius: 5px;
+  color: #10723a;
+  padding: 0 6px;
 }
 
 .plus-icon {
-    font-size: 8px;
-    color: #10723A;
-    position: absolute;
-    top: 28%;
-    right: 35%;
+  font-size: 8px;
+  color: #10723a;
+  position: absolute;
+  top: 28%;
+  right: 35%;
 }

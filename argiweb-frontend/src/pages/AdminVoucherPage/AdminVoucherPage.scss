@@ -1,0 +1,72 @@
+.custom-card {
+  border: 1px solid #c4c4c4;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.custom-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+.custom-card .ant-card-head {
+  background-color: #10723c;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  font-size: 16px;
+  padding: 10px 0;
+}
+
+.custom-card .ant-card-body {
+  padding: 16px;
+  font-size: 14px;
+  line-height: 1.6;
+  height: 230px;
+}
+
+.custom-card p {
+  margin: 8px 0;
+  color: #333;
+}
+
+.custom-card p strong {
+  color: #10723c;
+}
+
+.custom-card.card-expired {
+  .ant-card-head {
+    background-color: #f44336;
+    color: #fff;
+  }
+  .ant-card-head-title {
+    font-weight: bold;
+  }
+  border: 2px solid #f44336;
+}
+
+.status-text {
+  color: #f44336;
+  font-weight: bold;
+}
+
+.voucher-button__delete {
+  transform: translateY(-40%);
+  margin-right: 5px;
+  color: #f44336;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  border: 1px solid #f44336;
+  overflow: hidden;
+
+  &:hover {
+    color: #fff !important;
+    background-color: #f44336 !important;
+    border: 1px solid #f44336 !important;
+  }
+}

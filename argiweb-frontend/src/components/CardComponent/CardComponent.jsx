@@ -1,20 +1,21 @@
-import { Card, message } from 'antd'
-import {ShoppingCartOutlined, PlusOutlined} from '@ant-design/icons'
-import './CardComponent.scss'
-import React from 'react'
-import { useNavigate } from 'react-router-dom'
-import StarRating from '../StarRatingComponent/StarRating'
-import { useDispatch } from 'react-redux';
-import { addToCart } from '../../redux/slides/cartSlide'
+import { Card, message } from "antd";
+import { ShoppingCartOutlined, PlusOutlined } from "@ant-design/icons";
+import "./CardComponent.scss";
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import StarRating from "../StarRatingComponent/StarRating";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../redux/slides/cartSlide";
 
 const CardComponent = (props) => {
-  const {countInStock, image, name, price, rating, selled, id, numReviews} = props
+  const { countInStock, image, name, price, rating, selled, id, numReviews } =
+    props;
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleNavigateProduct = () => {
     navigate(`/product/${id}`);
-  }
+  };
 
   const handleAddToCart = (e) => {
     e.stopPropagation();
@@ -26,25 +27,25 @@ const CardComponent = (props) => {
   return (
     <Card
       hoverable
-      className='card-container'
+      className="card-container"
       cover={<img alt={name} src={image} />}
       onClick={handleNavigateProduct}
     >
-    <h3 className='name-card'>{name}</h3>
-    <div className='rating'>
-      <StarRating rating={rating} />
-      <span className='number-rating'>({ numReviews || 0})</span>
-    </div>
-    <p className='sold-count'>Đã bán {selled}</p>
-    <div className='price-cart'>
-      <p className='price-product'>{price.toLocaleString('vi-VN')} ₫</p>
-      <div className="custom-cart-icon" onClick={handleAddToCart}>
-          <ShoppingCartOutlined className='cart-icon'/>
-          <PlusOutlined className='plus-icon'  />
+      <h3 className="name-card">{name}</h3>
+      <div className="rating">
+        <StarRating rating={rating} />
+        <span className="number-rating">({numReviews || 0})</span>
       </div>
-    </div>
-  </Card>
-  )
-}
+      <p className="sold-count">Đã bán {selled}</p>
+      <div className="price-cart">
+        <p className="price-product">{price.toLocaleString("vi-VN")} ₫</p>
+        <div className="custom-cart-icon" onClick={handleAddToCart}>
+          <ShoppingCartOutlined className="cart-icon" />
+          <PlusOutlined className="plus-icon" />
+        </div>
+      </div>
+    </Card>
+  );
+};
 
-export default CardComponent
+export default CardComponent;
