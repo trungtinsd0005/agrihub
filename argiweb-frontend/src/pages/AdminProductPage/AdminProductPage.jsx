@@ -240,6 +240,15 @@ const AdminProductPage = () => {
       }
     }
 
+    const symptoms = Array.isArray(values.symptoms)
+      ? values.symptoms
+      : typeof values.symptoms === "string"
+      ? values.symptoms
+          .split(".")
+          .map((symptom) => symptom.trim())
+          .filter((symptom) => symptom.length > 0)
+      : [];
+
     const newProduct = {
       name: values.name,
       type: values.newType || values.type,
@@ -256,6 +265,10 @@ const AdminProductPage = () => {
       storageInstructions: values.storageInstructions,
       weightProduct: values.weightProduct,
     };
+
+    if (symptoms.length > 0) {
+      newProduct.symptoms = symptoms;
+    }
 
     if (currentProduct) {
       editProduct({ id: currentProduct._id, data: newProduct });
@@ -626,6 +639,27 @@ const AdminProductPage = () => {
               </Form.Item>
             )}
           </Form.Item>
+          {(currentProduct?.type === "Thuốc trừ bệnh" ||
+            selectedType === "Thuốc trừ bệnh") && (
+            <Form.Item
+              name="symptoms"
+              label="Symptoms"
+              rules={[
+                {
+                  required: currentProduct?.type === "Thuốc trừ bệnh",
+                  message: "Please input the symptoms for this product!",
+                },
+              ]}
+            >
+              <Input.TextArea
+                rows={4}
+                placeholder="Nhập triệu chứng của bệnh trên cây nếu có như (đốm lá, bột trắng, lá vàng,...)"
+                disabled={
+                  currentProduct && currentProduct?.type !== "Thuốc trừ bệnh"
+                }
+              />
+            </Form.Item>
+          )}
           <Form.Item
             name="price"
             label="Price"

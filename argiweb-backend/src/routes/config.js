@@ -4,7 +4,7 @@ module.exports = {
   orderInfo: "Thanh toán đơn hàng",
   partnerCode: "MOMO",
   redirectUrl: "http://localhost:3000/thankyou",
-  ipnUrl: "https://8eda-27-2-119-131.ngrok-free.app/api/payment/callbackMOMO",
+  ipnUrl: "https://0196-113-23-29-79.ngrok-free.app/api/payment/callbackMOMO",
   requestType: "payWithMethod",
   extraData: "",
   orderGroupId: "",

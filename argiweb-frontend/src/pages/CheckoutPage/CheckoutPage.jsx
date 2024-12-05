@@ -26,6 +26,7 @@ import momoImg from "../../assets/images/momoImg.png";
 import { useMutation } from "@tanstack/react-query";
 import { createMoMo } from "../../services/PaymentService";
 import { applyVoucher } from "../../services/VoucherSercice";
+import VoucherModal from "../../components/VoucherModal/VoucherModal";
 
 const { Option } = Select;
 
@@ -39,6 +40,7 @@ const CheckoutPage = () => {
   const [loading, setLoading] = useState(true);
   const userId = localStorage.getItem("userId");
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isVoucherModalVisible, setIsVoucherModalVisible] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState(null);
   const [voucherCode, setVoucherCode] = useState("");
   const [discountValue, setDiscountValue] = useState(0);
@@ -115,8 +117,16 @@ const CheckoutPage = () => {
     setIsModalVisible(true);
   };
 
+  const showVoucherModal = () => {
+    setIsVoucherModalVisible(true);
+  };
+
   const handleCancel = () => {
     setIsModalVisible(false);
+  };
+
+  const handleVoucherCancel = () => {
+    setIsVoucherModalVisible(false);
   };
 
   const handlePaymentChange = (e) => {
@@ -502,7 +512,7 @@ const CheckoutPage = () => {
                 </Button>
               </div>
               <div className="discount-checkout__list">
-                <span>Chọn mã giảm giá tại đây</span>
+                <span onClick={showVoucherModal}>Chọn mã giảm giá tại đây</span>
               </div>
               <div className="discount-checkout__container">
                 <Input placeholder="Mã giảm giá vận chuyển" />
@@ -565,6 +575,12 @@ const CheckoutPage = () => {
         </Col>
       </Row>
       <AuthModalComponent visible={isModalVisible} onCancel={handleCancel} />
+      <VoucherModal
+        visible={isVoucherModalVisible}
+        onCancel={handleVoucherCancel}
+        subtotal={subtotal}
+        setDiscountValue={setDiscountValue}
+      />
     </WrapperBgColorComponent>
   );
 };

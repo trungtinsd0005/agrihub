@@ -167,20 +167,19 @@
   background-color: #fff;
   border-radius: 5px;
 
-  .voucher-button {
-    background-color: #0a923c;
-    color: #fff;
-    padding: 20px;
-    border-radius: 0;
-    font-weight: 500;
-    &:hover {
-      background-color: #10723a !important;
-      color: #fff !important;
-    }
-  }
-
   .voucher-input {
     width: 50%;
+  }
+}
+
+.voucher-button {
+  background-color: #0a923c;
+  color: #fff;
+  border-radius: 0;
+  font-weight: 500;
+  &:hover {
+    background-color: #10723a !important;
+    color: #fff !important;
   }
 }
 
@@ -198,4 +197,49 @@
 .custom-card__voucher {
   width: 50%;
   box-shadow: 0 0 10px rgb(0 0 0 / 6%);
+
+  .date-voucher {
+    color: red;
+    font-size: 13px;
+  }
+}
+
+.custom-card__voucher .ant-card-body {
+  padding: 0 !important;
+}
+
+.card-container__voucher {
+  display: flex;
+}
+
+.card-voucher__left {
+  background-color: #0a923c;
+  width: 30%;
+  text-align: center;
+}
+
+.logo__voucher {
+  width: 30%;
+  margin-top: 25%;
+}
+
+.brand-name__voucher {
+  color: #fff;
+  font-weight: 500;
+}
+
+.card-voucher__right {
+  padding: 10px;
+  display: flex;
+
+  p {
+    color: rgba(0, 0, 0, 0.54);
+    font-size: 13px;
+    margin: 0;
+  }
+
+  .card-voucher__button {
+    transform: translateY(30%);
+    margin-right: 10px;
+  }
 }

@@ -12,6 +12,14 @@ const createProduct = (newProduct) => {
           message: "The name of product is already in use",
         });
       }
+
+      if (newProduct.symptoms && newProduct.type !== "Thuốc trừ bệnh") {
+        return resolve({
+          status: "ERR",
+          message:
+            "Cannot add symptoms. Only products of type 'Thuốc trừ bệnh' can have symptoms.",
+        });
+      }
       const createdProduct = await Product.create(newProduct);
       if (createdProduct) {
         resolve({
@@ -39,9 +47,18 @@ const updateProduct = (id, data) => {
           message: "The Product is not defined",
         });
       }
+
+      if (data.symptoms && checkProduct.type !== "Thuốc trừ bệnh") {
+        return resolve({
+          status: "ERR",
+          message:
+            "Cannot update symptoms. Only products of type 'Thuốc trừ bệnh' can have symptoms.",
+        });
+      }
       const updatedProduct = await Product.findByIdAndUpdate(id, data, {
         new: true,
       });
+
       console.log("updateProduct: ", updatedProduct);
 
       resolve({
@@ -117,7 +134,7 @@ const getAllProduct = (sort, filter) => {
 
       let sortQuery = {};
       if (sort) {
-        sortQuery[sort[1]] = sort[0] === "asc" ? 1 : -1; // 'asc' = 1, 'desc' = -1
+        sortQuery[sort[1]] = sort[0] === "asc" ? 1 : -1;
       }
 
       const allProduct = await Product.find(query).sort(sortQuery);

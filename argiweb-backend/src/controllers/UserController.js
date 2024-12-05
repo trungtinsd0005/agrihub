@@ -171,16 +171,21 @@ const refreshToken = async (req, res) => {
   }
 };
 
-const getUserVouchers = async (userId) => {
+const getUserVouchers = async (req, res) => {
+  const { userId } = req.params;
   try {
-    const user = await User.findById(userId).populate("vouchers");
+    const user = await User.findById(userId).populate({
+      path: "vouchers",
+      match: {
+        expirationDate: { $gt: new Date() },
+      },
+    });
+
     if (!user) throw new Error("Người dùng không tồn tại!");
 
-    return user.vouchers.filter(
-      (voucher) => new Date(voucher.expirationDate) > Date.now()
-    );
+    res.status(200).json(user.vouchers || []);
   } catch (error) {
-    console.error("Lỗi khi lấy voucher của người dùng:", error.message);
+    console.error(`Lỗi khi lấy voucher của user ${userId}:`, error.message);
     throw error;
   }
 };

@@ -13,7 +13,11 @@ import {
   BellOutlined,
   LogoutOutlined,
 } from "@ant-design/icons";
-import { updateUser, getDetailUser } from "../../services/UserService";
+import {
+  updateUser,
+  getDetailUser,
+  getUserVouchers,
+} from "../../services/UserService";
 import {
   getDetailOrder,
   cancelOrder,
@@ -37,11 +41,11 @@ const ProfilePage = () => {
   const [wardData, setWardData] = useState([]);
   const userId = localStorage.getItem("userId");
   const dispatch = useDispatch();
+  const [vouchers, setVouchers] = useState([]);
   const navigate = useNavigate();
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-  //Info Handle
   useEffect(() => {
     const fetchUserDetails = async () => {
       if (userId) {
@@ -68,6 +72,18 @@ const ProfilePage = () => {
       }
     };
     fetchCityData();
+
+    const fetchVouchers = async () => {
+      if (userId) {
+        try {
+          const data = await getUserVouchers(userId);
+          setVouchers(data);
+        } catch (error) {
+          console.error("Error fetching vouchers:", error);
+        }
+      }
+    };
+    fetchVouchers();
   }, [userId]);
 
   const { mutate, isLoading } = useMutation({
@@ -282,7 +298,7 @@ const ProfilePage = () => {
         );
 
       case "vouchers":
-        return <MyVoucher />;
+        return <MyVoucher vouchers={vouchers} />;
       case "favorites":
         return <div>Sản phẩm yêu thích</div>;
       case "reviews":

@@ -197,7 +197,7 @@ const AdminDashBoardPage = () => {
                 dataKey="name"
                 tick={{ fontSize: 12, textAnchor: "middle" }}
               />
-              <YAxis />
+              <YAxis allowDecimals={false} domain={[0, "dataMax"]} />
               <Tooltip />
               <Legend />
               <Bar

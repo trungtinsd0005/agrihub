@@ -399,13 +399,15 @@ const ProductDetailComponent = () => {
                 Thành phần:
               </Col>
               <Col span={12} className="description-content">
-                {product.ingredients
-                  .trim()
-                  .split(".")
-                  .filter((item) => item.trim() !== "")
-                  .map((sentence, index) => (
-                    <div key={index}>- {sentence.trim()}.</div>
-                  ))}
+                {product.ingredients && product.ingredients.trim() !== ""
+                  ? product.ingredients
+                      .trim()
+                      .split(".")
+                      .filter((item) => item.trim() !== "")
+                      .map((sentence, index) => (
+                        <div key={index}>- {sentence.trim()}.</div>
+                      ))
+                  : null}
               </Col>
             </Row>
             <Row className="box-description">
@@ -413,13 +415,16 @@ const ProductDetailComponent = () => {
                 Hướng dẫn sử dụng:
               </Col>
               <Col span={12} className="description-content">
-                {product.usageInstructions
-                  .trim()
-                  .split(".")
-                  .filter((item) => item.trim() !== "")
-                  .map((sentence, index) => (
-                    <div key={index}>{sentence.trim()}.</div>
-                  ))}
+                {product.usageInstructions &&
+                product.usageInstructions.trim() !== ""
+                  ? product.usageInstructions
+                      .trim()
+                      .split(".")
+                      .filter((item) => item.trim() !== "")
+                      .map((sentence, index) => (
+                        <div key={index}>{sentence.trim()}.</div>
+                      ))
+                  : null}
               </Col>
             </Row>
             <Row className="box-description">
@@ -427,7 +432,9 @@ const ProductDetailComponent = () => {
                 Hướng dẫn bảo quản:
               </Col>
               <Col span={12} className="description-content">
-                {product.storageInstructions}
+                {product.storageInstructions
+                  ? product.storageInstructions
+                  : null}
               </Col>
             </Row>
             <Row className="box-description">
@@ -435,7 +442,9 @@ const ProductDetailComponent = () => {
                 Trọng lượng:
               </Col>
               <Col span={12} className="description-content">
-                {product.weightProduct}
+                {product.storageInstructions
+                  ? product.storageInstructions
+                  : null}
               </Col>
             </Row>
             {product.productionDate ? (

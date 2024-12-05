@@ -5,6 +5,7 @@ const OrderRouter = require("./OrderRouter");
 const ImageRouter = require("./ImageRouter");
 const InvoiceRouter = require("./InvoiceRouter");
 const VoucherRouter = require("./VoucherRouter");
+const WebhookRouter = require("./WebhookRouter");
 
 const routes = (app) => {
   app.use("/api/user", UserRouter);
@@ -14,6 +15,7 @@ const routes = (app) => {
   app.use("/api/image", ImageRouter);
   app.use("/api/invoice", InvoiceRouter);
   app.use("/api/vouchers", VoucherRouter);
+  app.use("/api/webhook", WebhookRouter);
 };
 
 module.exports = routes;

@@ -139,6 +139,16 @@ const AuthModalComponent = ({ visible, onCancel }) => {
                 }}
               >
                 <Form.Item
+                  name="email"
+                  rules={[
+                    { required: true, message: "Vui lòng nhập email!" },
+                    { type: "email", message: "Email không hợp lệ!" },
+                  ]}
+                >
+                  <Input placeholder="Email" />
+                </Form.Item>
+
+                <Form.Item
                   name="name"
                   rules={[{ required: true, message: "Vui lòng nhập tên!" }]}
                 >
@@ -156,16 +166,6 @@ const AuthModalComponent = ({ visible, onCancel }) => {
                   ]}
                 >
                   <Input placeholder="Số điện thoại" />
-                </Form.Item>
-
-                <Form.Item
-                  name="email"
-                  rules={[
-                    { required: true, message: "Vui lòng nhập email!" },
-                    { type: "email", message: "Email không hợp lệ!" },
-                  ]}
-                >
-                  <Input placeholder="Email" />
                 </Form.Item>
 
                 <Form.Item

@@ -46,10 +46,22 @@ export const updateUser = async (id, data) => {
   }
 };
 
+export const getAllUser = async () => {
+  try {
+    const res = await apiClient.get("/user/getAllUser");
+    return res.data;
+  } catch (error) {
+    console.error(
+      "Get All User Error:",
+      error.response ? error.response.data : error.message
+    );
+    throw error;
+  }
+};
+
 export const getDetailUser = async (id) => {
   try {
     const res = await apiClient.get(`/user/get-details/${id}`);
-    console.log("Fetched User Data:", res.data);
     return res.data;
   } catch (error) {
     console.error(
@@ -60,13 +72,14 @@ export const getDetailUser = async (id) => {
   }
 };
 
-export const getAllUser = async () => {
+export const getUserVouchers = async (userId) => {
+  console.log("User ID sent to API:", userId);
   try {
-    const res = await apiClient.get("/user/getAllUser");
+    const res = await apiClient.get(`/user/get-vouchers/${userId}`);
     return res.data;
   } catch (error) {
     console.error(
-      "Get All User Error:",
+      "Get User Vouchers Error:",
       error.response ? error.response.data : error.message
     );
     throw error;

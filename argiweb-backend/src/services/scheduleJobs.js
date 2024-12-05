@@ -34,7 +34,7 @@ const distributeVouchers = async () => {
 
 const scheduleJobs = () => {
   schedule.scheduleJob("0 * * * *", cancelUnpaidOrders);
-  schedule.scheduleJob("0 4 * * *", distributeVouchers);
+  schedule.scheduleJob("* * * * *", distributeVouchers);
 };
 
 module.exports = scheduleJobs;

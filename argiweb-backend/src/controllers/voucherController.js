@@ -73,6 +73,10 @@ const applyVoucher = async (req, res) => {
     const voucher = await Voucher.findOne({ code });
 
     if (!voucher) {
+      await User.updateOne(
+        { _id: req.user._id },
+        { $pull: { vouchers: code } }
+      );
       return res.status(404).json({ message: "Không tìm thấy Voucher" });
     }
 
@@ -145,6 +149,11 @@ const deleteVoucher = async (req, res) => {
     if (!voucher) {
       return res.status(404).json({ message: "Voucher không tồn tại" });
     }
+
+    await User.updateMany(
+      { vouchers: voucher._id },
+      { $pull: { vouchers: voucher._id } }
+    );
 
     res.status(200).json({
       message: "Xóa voucher thành công",
